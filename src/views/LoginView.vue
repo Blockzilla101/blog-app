@@ -3,8 +3,9 @@
 </script>
 
 <template>
-    <section>
+    <section class="account-section">
         <h1>Login</h1>
+        <p>Login to view your tasks. Create an account if you don't have one.</p>
 
         <form class="form">
             <div class="user-input">
@@ -22,12 +23,10 @@
 
         <div class="alternative">
             <span class="or"><span>OR</span></span>
-            <router-link class="link" to="/sign-up">Create an account</router-link>
+            <router-link class="link" to="/sign-up">Don't have an account?</router-link>
         </div>
     </section>
 </template>
 
 <style scoped>
-
-
 </style>
