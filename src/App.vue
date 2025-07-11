@@ -2,7 +2,13 @@
 </script>
 
 <template>
-    <h1>hello world</h1>
+    <main>
+        <RouterView v-slot="{ Component }">
+            <Transition name="fade">
+                <component :is="Component" />
+            </Transition>
+        </RouterView>
+    </main>
 </template>
 
 <style scoped>
