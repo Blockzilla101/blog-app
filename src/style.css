@@ -108,7 +108,7 @@ main {
     height: 100%;
     background-color: var(--foreground-color);
     z-index: -1;
-    transform: translateY(100%);
+    transform: translateX(-120%) skewX(30deg);
     transition: 0.2s ease-in-out;
 }
 

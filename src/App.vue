@@ -6,7 +6,7 @@
         <nav>
             <div class="logo">
                 <div>
-                    <img alt="logo" src="/placeholder.svg">
+                    <img alt="logo" src="/app-logo-dark.svg">
                 </div>
                 <h1>Todo App</h1>
             </div>
