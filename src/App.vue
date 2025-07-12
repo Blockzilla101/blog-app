@@ -31,6 +31,7 @@ nav {
     justify-content: space-between;
     align-items: center;
     border-bottom: 3px solid var(--foreground-color);
+    background: var(--card-background-color);
     backdrop-filter: blur(12px);
     padding: 0 0 0 2em;
     height: 4em;
