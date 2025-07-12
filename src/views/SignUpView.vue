@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <section class="account-section">
+    <section class="card-section">
         <h1>Sign Up</h1>
         <p>Create your account today to start organizing your tasks.</p>
 

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <section class="account-section">
+    <section class="card-section">
         <h1>Login</h1>
         <p>Login to view your tasks. Create an account if you don't have one.</p>
 
