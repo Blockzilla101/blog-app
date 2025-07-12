@@ -5,14 +5,14 @@
     --background-color: #f0f0f0;
     --foreground-color: #222;
     --card-background-color: #f0f0f066;
-    --text-color: #eee;
+    --text-color: black;
 
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     line-height: 1.5;
     font-weight: 400;
 
     color-scheme: light dark;
-    color: black;
+    color: var(--text-color);
     background-color: #eee;
 
     font-synthesis: none;
@@ -73,7 +73,6 @@ main {
 .user-input {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     gap: 0.5em;
     width: 100%;
 }
@@ -115,6 +114,7 @@ main {
     background-color: var(--foreground-color);
     transform: translateX(-120%) skewX(30deg);
     transition: 0.2s ease-in-out;
+    z-index: -1;
 }
 
 .btn:hover {
@@ -142,7 +142,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: var(--text-color);
+    color: var(--background-color);
     background-color: var(--foreground-color);
     border-radius: 50%;
     width: 3em;

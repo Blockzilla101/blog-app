@@ -12,7 +12,9 @@
             </div>
             <ul>
                 <li>
-                    <router-link to="/login">Login</router-link>
+                    <router-link class="link" to="/login">
+                        <span>Login</span>
+                    </router-link>
                 </li>
             </ul>
         </nav>
@@ -33,7 +35,7 @@ nav {
     border-bottom: 3px solid var(--foreground-color);
     background: var(--card-background-color);
     backdrop-filter: blur(12px);
-    padding: 0 0 0 2em;
+    padding: 0 0 0 1em;
     height: 4em;
     font-weight: 800;
 }
@@ -57,7 +59,6 @@ nav ul li {
     position: relative;
     display: flex;
     align-items: center;
-    padding: 0 2em;
     font-size: 1.2em;
     transition: 0.2s ease-in-out;
     overflow: hidden;
@@ -81,6 +82,13 @@ nav ul li:hover::before {
 
 nav ul li:hover {
     color: var(--background-color);
+}
+
+.link {
+    display: flex;
+    align-items: center;
+    padding: 0 1.5em;
+    height: 100%;
 }
 
 </style>
