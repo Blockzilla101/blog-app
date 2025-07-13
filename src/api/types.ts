@@ -17,3 +17,22 @@ export interface ErrorItem {
     type: string;
     value: string | number;
 }
+
+export interface AccountInfo {
+    uuid: string;
+    firstName: string,
+    lastName: string,
+    todoLists: TodoList[]
+}
+
+export interface TodoList {
+    uuid: string;
+    name: string;
+    items: TodoItem[];
+}
+
+export interface TodoItem {
+    uuid: string;
+    title: string;
+    completed: boolean;
+}

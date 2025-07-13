@@ -1,49 +1,110 @@
 <script lang="ts" setup>
 
-import { ref } from "vue";
 import TodoItem from "./TodoItem.vue";
+import type { TodoItem as TodoItemObj, TodoList } from "../api/types.ts";
+import { ref } from "vue";
+import { Backend } from "../api/backend.ts";
 
-const todos = ref([
-    { id: 2, text: "Build a Todo App".repeat(15), completed: false },
-    { id: 3, text: "Deploy to Production", completed: false },
-    { id: 1, text: "Learn Vue.js", completed: true },
-]);
+const props = defineProps({
+    list: {
+        required: true,
+        type: Object as () => TodoList,
+    },
+});
+
+const newTodo = ref<TodoItemObj | null>(null);
+
+function addTodo() {
+    newTodo.value = {
+        title: "",
+        uuid: "new-todo",
+        completed: false,
+    };
+}
+
+async function onTodoUpdate(uuid: string) {
+    if (uuid === "new-todo" && newTodo.value) {
+        if (newTodo.value.title.length === 0) {
+            newTodo.value = null;
+            return;
+        }
+
+        const item = await Backend.createTodo(props.list.uuid, { title: newTodo.value.title });
+        props.list.items.unshift(item);
+
+        newTodo.value = null;
+    }
+}
 
 </script>
 
 <template>
-    <section class="todo-list-section">
-        <h1>Your Todo List</h1>
-        <button class="btn">Add New</button>
+    <section class="list-container">
+        <div class="title-container">
+            <h1>{{ $props.list.name }}</h1>
+            <button class="icon-btn icon-btn-primary" @click="addTodo">
+                <img alt="Add Todo" src="/placeholder.svg">
+            </button>
+        </div>
 
-        <div class="input-container">
-            <label>Show Completed</label>
-            <input type="checkbox">
+        <!--        <div class="input-container">-->
+        <!--            <label>Show Completed</label>-->
+        <!--            <input type="checkbox">-->
+        <!--        </div>-->
+
+        <div v-if="list.items.length === 0 && newTodo == null" class="empty-list-container">
+            You currently have no items, use the add buttons to add tasks.
         </div>
 
         <ul class="todo-items">
-            <TodoItem v-for="item in todos" :key="item.id" :todo="item">
+            <TodoItem v-if="newTodo != null" v-model="newTodo" :is-new="true" @focus-out="onTodoUpdate">
+            </TodoItem>
+            <TodoItem v-for="(item, idx) in list.items" :key="item.uuid" v-model="list.items[idx]">
             </TodoItem>
         </ul>
     </section>
 </template>
 
 <style scoped>
+@import "tailwindcss";
 
-.todo-list-section {
+.list-container {
     background: var(--card-background-color);
     backdrop-filter: blur(12px);
     padding: 2em 3em;
     border-radius: 1em;
+    width: 60em;
+    justify-self: center;
 }
 
-.todo-list-section h1 {
+.list-container h1 {
     font-size: 2em;
     font-weight: 800;
     margin-bottom: 0.5em;
     color: var(--text-color);
     text-decoration: underline;
     text-underline-offset: 0.125em;
+}
+
+.title-container {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2em;
+}
+
+.title-container button {
+    border: 1px solid black
+}
+
+.title-container img {
+    max-height: 2em;
+}
+
+.empty-list-container {
+    font-weight: bold;
+    justify-self: center;
+    margin: 2em 0;
+    color: color-mix(in srgb, var(--primary-color), black 60%);
 }
 
 .todo-items {

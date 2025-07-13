@@ -1,22 +1,43 @@
 <script lang="ts" setup>
 
-defineProps({
-    todo: {
-        type: Object,
-        required: true,
+import type { TodoItem } from "../api/types.ts";
+import { onMounted, ref, type VNodeRef } from "vue";
+
+const props = defineProps({
+    isNew: {
+        type: Boolean,
+        default: false,
     },
+});
+
+const emit = defineEmits({
+    focusOut: (uuid: string) => Promise<void>,
+});
+
+const inputElement = ref<VNodeRef | null>(null);
+
+const itemModel = defineModel({
+    type: Object as () => TodoItem,
+    required: true,
+});
+
+onMounted(() => {
+    if (props.isNew) {
+        inputElement.value?.focus();
+    }
 });
 
 </script>
 
 <template>
-    <li :class="{ completed: todo.completed }" class="todo-item">
-        <input :value="todo.text" class="title" maxlength="50">
+    <li :class="{ completed: itemModel.completed }" class="todo-item">
+        <input ref="inputElement" v-model="itemModel.title" class="title" maxlength="50"
+               @focusout="$emit('focusOut', itemModel.uuid)">
         <div class="todo-actions">
-            <button class="btn-complete">
+            <button class="icon-btn icon-btn-primary">
                 <img alt="Complete Todo" src="/checkmark-dark.svg">
             </button>
-            <button class="btn-delete">
+            <button class="icon-btn icon-btn-danger">
                 <img alt="Delete Todo" src="/trash-dark.svg">
             </button>
         </div>
@@ -54,24 +75,12 @@ defineProps({
     color: color-mix(in srgb, var(--text-color), white 50%);
 }
 
-.todo-item button {
+.icon-btn {
     opacity: 0;
-    background-color: transparent;
-    cursor: pointer;
-    padding: 0.25em;
-    transition: 0.2s ease-in-out;
 }
 
-.todo-item:hover button {
+.todo-item:hover .icon-btn, .todo-item:focus-within .icon-btn {
     opacity: 1;
-}
-
-.btn-complete:hover {
-    filter: invert(42%) sepia(76%) saturate(1842%) hue-rotate(163deg) brightness(97%) contrast(101%);
-}
-
-.btn-delete:hover {
-    filter: invert(42%) sepia(66%) saturate(516%) hue-rotate(309deg) brightness(111%) contrast(117%);
 }
 
 .todo-actions {
@@ -81,11 +90,11 @@ defineProps({
     transition: 0.2s;
 }
 
-.todo-item:hover .todo-actions {
+.todo-item:hover .todo-actions, .todo-item:focus-within .todo-actions {
     width: unset;
 }
 
-.todo-actions img {
+.icon-btn img {
     height: 1.5em;
 }
 

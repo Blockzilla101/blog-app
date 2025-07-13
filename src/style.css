@@ -174,6 +174,20 @@ main {
     @apply text-red-400;
 }
 
+.icon-btn {
+    cursor: pointer;
+    padding: 0.25em;
+    transition: 0.2s ease-in-out;
+}
+
+.icon-btn-primary:hover {
+    filter: invert(42%) sepia(76%) saturate(1842%) hue-rotate(163deg) brightness(97%) contrast(101%);
+}
+
+.icon-btn-danger:hover {
+    filter: invert(42%) sepia(66%) saturate(516%) hue-rotate(309deg) brightness(111%) contrast(117%);
+}
+
 @media (max-width: 600px) {
     .card-section {
         margin-top: 0;
