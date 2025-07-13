@@ -22,8 +22,8 @@ function addTodo() {
     };
 }
 
-async function onTodoUpdate(uuid: string) {
-    if (uuid === "new-todo" && newTodo.value) {
+async function onTodoUpdate(item: TodoItemObj) {
+    if (item.uuid === "new-todo" && newTodo.value) {
         if (newTodo.value.title.length === 0) {
             newTodo.value = null;
             return;
@@ -33,7 +33,10 @@ async function onTodoUpdate(uuid: string) {
         props.list.items.unshift(item);
 
         newTodo.value = null;
+        return;
     }
+
+    await Backend.updateTodo(props.list?.uuid, item.uuid, item);
 }
 
 </script>
@@ -59,7 +62,8 @@ async function onTodoUpdate(uuid: string) {
         <ul class="todo-items">
             <TodoItem v-if="newTodo != null" v-model="newTodo" :is-new="true" @focus-out="onTodoUpdate">
             </TodoItem>
-            <TodoItem v-for="(item, idx) in list.items" :key="item.uuid" v-model="list.items[idx]">
+            <TodoItem v-for="(item, idx) in list.items" :key="item.uuid" v-model="list.items[idx]"
+                      @focus-out="onTodoUpdate">
             </TodoItem>
         </ul>
     </section>
