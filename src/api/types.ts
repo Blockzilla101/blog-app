@@ -5,6 +5,11 @@ export interface NewAccountData {
     lastName: string;
 }
 
+export interface LoginData {
+    email: string;
+    password: string;
+}
+
 export interface ErrorItem {
     location: string;
     msg: string;

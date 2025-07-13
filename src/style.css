@@ -77,9 +77,10 @@ main {
     width: 100%;
 }
 
-.input-container .label-container {
+.label-container {
     display: flex;
     gap: 1em;
+    width: 100%;
     align-items: center;
     justify-content: space-between;
 }

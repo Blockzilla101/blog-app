@@ -50,9 +50,8 @@ async function formSubmit(event: Event) {
     }
     clearErrors();
 
-    // Handle form submission logic here
+    // todo save session & redirect to todo view
     console.log("Form submitted");
-
 }
 
 </script>
@@ -68,7 +67,7 @@ async function formSubmit(event: Event) {
                     <label>First Name</label>
                     <span class="error-text">{{ errors.firstName }}</span>
                 </div>
-                <input v-model="firstName" maxlength="50" minlength="2" placeholder="First name" type="text" />
+                <input v-model="firstName" maxlength="50" minlength="2" placeholder="First name" required type="text" />
             </div>
 
             <div class="input-container">
@@ -76,7 +75,7 @@ async function formSubmit(event: Event) {
                     <label>Last Name</label>
                     <span class="error-text">{{ errors.lastName }}</span>
                 </div>
-                <input v-model="lastName" maxlength="50" minlength="2" placeholder="Last name" type="text" />
+                <input v-model="lastName" maxlength="50" minlength="2" placeholder="Last name" required type="text" />
             </div>
 
             <div class="input-container">
@@ -84,7 +83,8 @@ async function formSubmit(event: Event) {
                     <label>Email</label>
                     <span class="error-text">{{ errors.email }}</span>
                 </div>
-                <input v-model="email" maxlength="100" minlength="1" placeholder="email@provider.com" type="email" />
+                <input v-model="email" maxlength="100" minlength="1" placeholder="email@provider.com" required
+                       type="email" />
             </div>
 
             <div class="input-container">
@@ -92,10 +92,11 @@ async function formSubmit(event: Event) {
                     <label>Password</label>
                     <span class="error-text">{{ errors.password }}</span>
                 </div>
-                <input v-model="password" minlength="8" placeholder="Choose a strong password" type="password" />
+                <input v-model="password" minlength="8" placeholder="Choose a strong password" required
+                       type="password" />
             </div>
 
-            <div class="submit">
+            <div class="label-container">
                 <span class="error-text">{{ errors.unknownError }}</span>
                 <button class="btn" type="submit">Sign Up</button>
             </div>
@@ -110,12 +111,7 @@ async function formSubmit(event: Event) {
 
 <style scoped>
 
-.submit {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.5em;
+.label-container:last-child {
     margin: 2em 0 0.5em 0;
 }
 

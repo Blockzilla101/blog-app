@@ -1,4 +1,4 @@
-import type { ErrorItem, NewAccountData } from "./types.ts";
+import type { ErrorItem, LoginData, NewAccountData } from "./types.ts";
 import axios, { AxiosError } from "axios";
 
 const base = import.meta.env.VITE_API_BASE;
@@ -32,12 +32,27 @@ export class Backend {
             // todo handle session creation
 
             console.log(res.data);
-
         } catch (e) {
             if (e instanceof AxiosError) {
                 throw new ApiError(e);
             }
             console.error("Unknown error while signing up", e);
+            throw new Error("Unknown API error");
+        }
+    }
+
+    public static async login(data: LoginData) {
+        try {
+            const res = await axios.post(`${base}/account/login`, data);
+
+            // todo handle session creation
+
+            console.log(res.data);
+        } catch (e) {
+            if (e instanceof AxiosError) {
+                throw new ApiError(e);
+            }
+            console.error("Unknown error while login", e);
             throw new Error("Unknown API error");
         }
     }
