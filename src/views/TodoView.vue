@@ -17,7 +17,7 @@ onMounted(async () => {
     <section v-if="account == null" class="card-section">
         <h1>Loading...</h1>
     </section>
-    <div v-else class="list-container">
+    <div v-else>
         <TodoList v-for="list in account.todoLists" :key="list.uuid" :list="list"></TodoList>
     </div>
 </template>

@@ -36,7 +36,18 @@ async function onTodoUpdate(item: TodoItemObj) {
         return;
     }
 
-    await Backend.updateTodo(props.list?.uuid, item.uuid, item);
+    await Backend.updateTodo(props.list.uuid, item.uuid, item);
+}
+
+async function onTodoDelete(uuid: string) {
+    const idx = props.list.items.findIndex(i => i.uuid === uuid);
+    await Backend.deleteTodo(props.list.uuid, uuid);
+    props.list.items.splice(idx, 1);
+}
+
+async function onTodoComplete(item: TodoItemObj) {
+    item.completed = !item.completed;
+    await Backend.updateTodo(props.list.uuid, item.uuid, item);
 }
 
 </script>
@@ -46,7 +57,7 @@ async function onTodoUpdate(item: TodoItemObj) {
         <div class="title-container">
             <h1>{{ $props.list.name }}</h1>
             <button class="icon-btn icon-btn-primary" @click="addTodo">
-                <img alt="Add Todo" src="/placeholder.svg">
+                <img alt="Add Todo" src="/plus.svg">
             </button>
         </div>
 
@@ -62,8 +73,9 @@ async function onTodoUpdate(item: TodoItemObj) {
         <ul class="todo-items">
             <TodoItem v-if="newTodo != null" v-model="newTodo" :is-new="true" @focus-out="onTodoUpdate">
             </TodoItem>
-            <TodoItem v-for="(item, idx) in list.items" :key="item.uuid" v-model="list.items[idx]"
-                      @focus-out="onTodoUpdate">
+            <TodoItem v-for="(item, idx) in list.items" :key="item.uuid"
+                      v-model="list.items[idx]"
+                      @complete="onTodoComplete" @delete="onTodoDelete" @focus-out="onTodoUpdate">
             </TodoItem>
         </ul>
     </section>
@@ -78,7 +90,7 @@ async function onTodoUpdate(item: TodoItemObj) {
     padding: 2em 3em;
     border-radius: 1em;
     width: 60em;
-    justify-self: center;
+    align-self: end;
 }
 
 .list-container h1 {
@@ -94,10 +106,6 @@ async function onTodoUpdate(item: TodoItemObj) {
     display: flex;
     justify-content: space-between;
     margin-bottom: 2em;
-}
-
-.title-container button {
-    border: 1px solid black
 }
 
 .title-container img {

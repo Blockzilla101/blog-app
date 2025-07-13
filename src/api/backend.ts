@@ -110,7 +110,7 @@ export class Backend {
     public static async deleteTodo(listUuid: string, todoUuid: string): Promise<void> {
         try {
             // todo use session token
-            await axios.patch(`${base}/todo/delete/${listUuid}/${todoUuid}`);
+            await axios.delete(`${base}/todo/delete/${listUuid}/${todoUuid}`);
         } catch (e) {
             if (e instanceof AxiosError) {
                 throw new ApiError(e);

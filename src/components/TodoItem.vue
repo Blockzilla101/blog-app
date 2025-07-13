@@ -12,6 +12,7 @@ const props = defineProps({
 
 defineEmits({
     focusOut: (item: TodoItem) => Promise<void>,
+    complete: (item: TodoItem) => Promise<void>,
     delete: (uuid: string) => Promise<void>,
 });
 
@@ -36,7 +37,7 @@ onMounted(() => {
                @focusout="$emit('focusOut', itemModel)">
         <div class="todo-actions">
             <button class="icon-btn icon-btn-primary">
-                <img alt="Complete Todo" src="/checkmark-dark.svg">
+                <img alt="Complete Todo" src="/checkmark-dark.svg" @click="$emit('complete', itemModel)">
             </button>
             <button class="icon-btn icon-btn-danger">
                 <img alt="Delete Todo" src="/trash-dark.svg" @click="$emit('delete', itemModel.uuid)">
