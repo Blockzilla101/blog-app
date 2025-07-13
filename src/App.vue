@@ -23,9 +23,14 @@
     <main>
         <RouterView></RouterView>
     </main>
+
+    <footer>
+        <span>Copyright &copy; 2025</span>
+    </footer>
 </template>
 
 <style scoped>
+@import "tailwindcss";
 
 nav {
     width: 100%;
@@ -89,6 +94,16 @@ nav ul li:hover {
     align-items: center;
     padding: 0 1.5em;
     height: 100%;
+}
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--card-background-color);
+    backdrop-filter: blur(12px);
+    padding: 2em 0;
+    font-weight: bolder;
 }
 
 </style>

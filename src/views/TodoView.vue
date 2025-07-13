@@ -14,14 +14,18 @@ onMounted(async () => {
 </script>
 
 <template>
-    <section v-if="account == null" class="card-section">
+    <section v-if="account == null" class="card-section card-center">
         <h1>Loading...</h1>
     </section>
-    <div v-else>
+    <div v-else class="list">
         <TodoList v-for="list in account.todoLists" :key="list.uuid" :list="list"></TodoList>
     </div>
 </template>
 
 <style scoped>
+
+.list {
+    min-height: 100vh;
+}
 
 </style>

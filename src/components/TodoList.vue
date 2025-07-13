@@ -90,7 +90,7 @@ async function onTodoComplete(item: TodoItemObj) {
     padding: 2em 3em;
     border-radius: 1em;
     width: 60em;
-    align-self: end;
+    margin: 5em 0;
 }
 
 .list-container h1 {
