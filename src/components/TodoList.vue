@@ -16,7 +16,7 @@ const todos = ref([
         <h1>Your Todo List</h1>
         <button class="btn">Add New</button>
 
-        <div class="user-input">
+        <div class="input-container">
             <label>Show Completed</label>
             <input type="checkbox">
         </div>

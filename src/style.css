@@ -70,24 +70,32 @@ main {
     width: 100%;
 }
 
-.user-input {
+.input-container {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
     width: 100%;
 }
 
-.user-input label {
-    font-weight: bold;
+.input-container .label-container {
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.user-input input {
+.input-container label {
+    font-weight: bold;
+    text-wrap: nowrap;
+}
+
+.input-container input {
     width: 100%;
     padding: 0.5em;
     border: 1px solid var(--foreground-color);
 }
 
-.user-input input:focus, .user-input input:hover {
+.input-container input:focus, .input-container input:hover {
     border-color: var(--primary-color);
     outline: none;
     transition: 0.2s;
@@ -95,11 +103,9 @@ main {
 
 .btn {
     position: relative;
-    margin: 2em 0 0.5em 0;
     padding: 0.5em 1em;
     border: 1px solid var(--foreground-color);
     cursor: pointer;
-    align-self: end;
     transition: 0.2s ease-in-out;
     overflow: hidden;
 }
@@ -161,6 +167,10 @@ main {
 
 .fade-enter-active, .fade-leave-active {
     transition: all 0.2s ease-out;
+}
+
+.error-text {
+    @apply text-red-400;
 }
 
 @media (max-width: 600px) {

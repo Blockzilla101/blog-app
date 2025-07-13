@@ -8,12 +8,12 @@
         <p>Login to view your tasks. Create an account if you don't have one.</p>
 
         <form class="form">
-            <div class="user-input">
+            <div class="input-container">
                 <label>Email</label>
                 <input placeholder="you@provider.com" type="email" />
             </div>
 
-            <div class="user-input">
+            <div class="input-container">
                 <label>Password</label>
                 <input placeholder="Your password" type="password" />
             </div>

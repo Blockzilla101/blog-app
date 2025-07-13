@@ -1,5 +1,60 @@
 <script lang="ts" setup>
 
+import { ref } from "vue";
+import { ApiError, Backend } from "../api/backend.ts";
+import { applyErrorsToRef } from "../api/util.ts";
+
+const errors = ref({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    unknownError: "",
+});
+
+const firstName = ref("");
+const lastName = ref("");
+const email = ref("");
+const password = ref("");
+
+function clearErrors() {
+    errors.value.firstName = "";
+    errors.value.lastName = "";
+    errors.value.email = "";
+    errors.value.password = "";
+    errors.value.unknownError = "";
+}
+
+async function formSubmit(event: Event) {
+    event.preventDefault();
+
+    try {
+        await Backend.signUp({
+            email: email.value,
+            firstName: firstName.value,
+            lastName: lastName.value,
+            password: password.value,
+        });
+    } catch (e) {
+        clearErrors();
+
+        if (e instanceof ApiError && e.errors.length > 0) {
+            applyErrorsToRef(errors.value, e.errors);
+        } else if (e instanceof Error) {
+            errors.value.unknownError = e.message;
+        } else {
+            errors.value.unknownError = "An unknown error occurred.";
+        }
+
+        return;
+    }
+    clearErrors();
+
+    // Handle form submission logic here
+    console.log("Form submitted");
+
+}
+
 </script>
 
 <template>
@@ -7,28 +62,43 @@
         <h1>Sign Up</h1>
         <p>Create your account today to start organizing your tasks.</p>
 
-        <form class="form">
-            <div class="user-input">
-                <label>First Name</label>
-                <input placeholder="First name" type="text" />
+        <form class="form" @submit="formSubmit">
+            <div class="input-container">
+                <div class="label-container">
+                    <label>First Name</label>
+                    <span class="error-text">{{ errors.firstName }}</span>
+                </div>
+                <input v-model="firstName" maxlength="50" minlength="2" placeholder="First name" type="text" />
             </div>
 
-            <div class="user-input">
-                <label>Last name</label>
-                <input placeholder="Last name" type="text" />
+            <div class="input-container">
+                <div class="label-container">
+                    <label>Last Name</label>
+                    <span class="error-text">{{ errors.lastName }}</span>
+                </div>
+                <input v-model="lastName" maxlength="50" minlength="2" placeholder="Last name" type="text" />
             </div>
 
-            <div class="user-input">
-                <label>Email</label>
-                <input placeholder="you@provider.com" type="email" />
+            <div class="input-container">
+                <div class="label-container">
+                    <label>Email</label>
+                    <span class="error-text">{{ errors.email }}</span>
+                </div>
+                <input v-model="email" maxlength="100" minlength="1" placeholder="email@provider.com" type="email" />
             </div>
 
-            <div class="user-input">
-                <label>Password</label>
-                <input placeholder="Choose a strong password" type="password" />
+            <div class="input-container">
+                <div class="label-container">
+                    <label>Password</label>
+                    <span class="error-text">{{ errors.password }}</span>
+                </div>
+                <input v-model="password" minlength="8" placeholder="Choose a strong password" type="password" />
             </div>
 
-            <button class="btn" type="submit">Sign Up</button>
+            <div class="submit">
+                <span class="error-text">{{ errors.unknownError }}</span>
+                <button class="btn" type="submit">Sign Up</button>
+            </div>
         </form>
 
         <div class="alternative">
@@ -39,4 +109,14 @@
 </template>
 
 <style scoped>
+
+.submit {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5em;
+    margin: 2em 0 0.5em 0;
+}
+
 </style>
