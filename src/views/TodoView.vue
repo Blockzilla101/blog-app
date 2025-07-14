@@ -32,7 +32,8 @@ onMounted(async () => {
 <style scoped>
 
 .list {
-    min-height: 100vh;
+    width: 100%;
+    max-width: 60em;
 }
 
 </style>

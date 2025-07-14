@@ -31,6 +31,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh;
 }
 
 .card-section {
@@ -185,6 +186,10 @@ main {
     .card-section {
         margin-top: 0;
         width: 100%;
+    }
+
+    .card-center {
+        margin: auto 0;
     }
 }
 

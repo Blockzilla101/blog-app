@@ -61,11 +61,6 @@ async function onTodoComplete(item: TodoItemObj) {
             </button>
         </div>
 
-        <!--        <div class="input-container">-->
-        <!--            <label>Show Completed</label>-->
-        <!--            <input type="checkbox">-->
-        <!--        </div>-->
-
         <div v-if="list.items.length === 0 && newTodo == null" class="empty-list-container">
             You currently have no items, use the add buttons to add tasks.
         </div>
@@ -89,8 +84,8 @@ async function onTodoComplete(item: TodoItemObj) {
     backdrop-filter: blur(12px);
     padding: 2em 3em;
     border-radius: 1em;
-    width: 60em;
     margin: 5em 0;
+    flex-grow: 1;
 }
 
 .list-container h1 {
@@ -106,6 +101,7 @@ async function onTodoComplete(item: TodoItemObj) {
     display: flex;
     justify-content: space-between;
     margin-bottom: 2em;
+    text-wrap: nowrap;
 }
 
 .title-container img {
@@ -115,6 +111,7 @@ async function onTodoComplete(item: TodoItemObj) {
 .empty-list-container {
     font-weight: bold;
     justify-self: center;
+    text-align: center;
     margin: 2em 0;
     color: color-mix(in srgb, var(--primary-color), black 60%);
 }
@@ -123,6 +120,19 @@ async function onTodoComplete(item: TodoItemObj) {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+}
+
+@media (max-width: 600px) {
+    .list-container {
+        margin-top: 0;
+        padding: 2em 1.5em 2em;
+    }
+}
+
+@media (max-width: 425px) {
+    .list-container {
+        font-size: 0.8em;
+    }
 }
 
 </style>

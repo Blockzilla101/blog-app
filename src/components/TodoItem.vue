@@ -66,6 +66,7 @@ onMounted(() => {
 
 .todo-item .title {
     flex-grow: 1;
+    min-width: 5em;
     outline: none;
 }
 
