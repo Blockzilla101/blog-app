@@ -19,12 +19,14 @@ onMounted(async () => {
 </script>
 
 <template>
-    <section v-if="account == null" class="card-section card-center">
-        <h1>Loading...</h1>
-    </section>
-    <div v-else class="list">
-        <TodoList v-for="list in account.todoLists" :key="list.uuid" :list="list"></TodoList>
-    </div>
+    <Transition name="fade">
+        <section v-if="account == null" class="card-section card-center">
+            <h1>Loading...</h1>
+        </section>
+        <div v-else class="list">
+            <TodoList v-for="list in account.todoLists" :key="list.uuid" :list="list"></TodoList>
+        </div>
+    </Transition>
 </template>
 
 <style scoped>
