@@ -1,7 +1,27 @@
-import type { AccountInfo, ErrorItem, LoginData, NewAccountData, TodoItem } from "./types.ts";
+import type {
+    AccountInfo,
+    AuthorizationResponse,
+    ErrorItem,
+    LoginData,
+    NewAccountData,
+    Session,
+    TodoItem,
+} from "./types.ts";
 import axios, { AxiosError } from "axios";
 
 const base = import.meta.env.VITE_API_BASE;
+
+function handleSessionCreate(data: AuthorizationResponse) {
+    localStorage.setItem("session", JSON.stringify(data.session));
+    localStorage.setItem("account", JSON.stringify(data.account));
+}
+
+export function getSessionToken(): string | null {
+    const data = localStorage.getItem("session");
+    if (!data) return null;
+    const session = JSON.parse(data) as Session;
+    return session.token ?? null;
+}
 
 export class ApiError extends Error {
     public errors: ErrorItem[];
@@ -25,13 +45,12 @@ export class ApiError extends Error {
 }
 
 export class Backend {
-    public static async signUp(data: NewAccountData) {
+    public static async signUp(data: NewAccountData): Promise<AuthorizationResponse> {
         try {
             const res = await axios.post(`${base}/account/sign-up`, data);
+            handleSessionCreate(res.data);
 
-            // todo handle session creation
-
-            console.log(res.data);
+            return res.data;
         } catch (e) {
             if (e instanceof AxiosError) {
                 throw new ApiError(e);
@@ -41,13 +60,12 @@ export class Backend {
         }
     }
 
-    public static async login(data: LoginData) {
+    public static async login(data: LoginData): Promise<AuthorizationResponse> {
         try {
             const res = await axios.post(`${base}/account/login`, data);
+            handleSessionCreate(res.data);
 
-            // todo handle session creation
-
-            console.log(res.data);
+            return res.data;
         } catch (e) {
             if (e instanceof AxiosError) {
                 throw new ApiError(e);
@@ -58,7 +76,23 @@ export class Backend {
     }
 
     public static async refreshSession() {
-        throw new Error("not implemented");
+        try {
+            const res = await axios.get(`${base}/session/refresh`, {
+                headers: {
+                    Authorization: `Bearer ${getSessionToken()}`,
+                },
+            });
+
+            handleSessionCreate(res.data);
+
+            return res.data;
+        } catch (e) {
+            if (e instanceof AxiosError) {
+                throw new ApiError(e);
+            }
+            console.error("Unknown error refreshing session", e);
+            throw new Error("Unknown API error");
+        }
     }
 
     public static async logout() {
@@ -67,8 +101,11 @@ export class Backend {
 
     public static async fetchSessionInfo(): Promise<AccountInfo> {
         try {
-            // todo use session token
-            const res = await axios.get(`${base}/account/info`);
+            const res = await axios.get(`${base}/account/info`, {
+                headers: {
+                    Authorization: `Bearer ${getSessionToken()}`,
+                },
+            });
             return res.data;
         } catch (e) {
             if (e instanceof AxiosError) {
@@ -81,8 +118,12 @@ export class Backend {
 
     public static async createTodo(listUuid: string, data: { title: string }): Promise<TodoItem> {
         try {
-            // todo use session token
-            const res = await axios.post(`${base}/todo/create/${listUuid}`, data);
+            const res = await axios.post(`${base}/todo/create/${listUuid}`, data, {
+                headers: {
+                    Authorization: `Bearer ${getSessionToken()}`,
+                },
+            });
+
             return res.data;
         } catch (e) {
             if (e instanceof AxiosError) {
@@ -95,8 +136,12 @@ export class Backend {
 
     public static async updateTodo(listUuid: string, todoUuid: string, data: Partial<TodoItem>): Promise<TodoItem> {
         try {
-            // todo use session token
-            const res = await axios.patch(`${base}/todo/update/${listUuid}/${todoUuid}`, data);
+            const res = await axios.patch(`${base}/todo/update/${listUuid}/${todoUuid}`, data, {
+                headers: {
+                    Authorization: `Bearer ${getSessionToken()}`,
+                },
+            });
+
             return res.data;
         } catch (e) {
             if (e instanceof AxiosError) {
@@ -109,8 +154,11 @@ export class Backend {
 
     public static async deleteTodo(listUuid: string, todoUuid: string): Promise<void> {
         try {
-            // todo use session token
-            await axios.delete(`${base}/todo/delete/${listUuid}/${todoUuid}`);
+            await axios.delete(`${base}/todo/delete/${listUuid}/${todoUuid}`, {
+                headers: {
+                    Authorization: `Bearer ${getSessionToken()}`,
+                },
+            });
         } catch (e) {
             if (e instanceof AxiosError) {
                 throw new ApiError(e);

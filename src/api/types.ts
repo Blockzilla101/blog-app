@@ -36,3 +36,13 @@ export interface TodoItem {
     title: string;
     completed: boolean;
 }
+
+export interface Session {
+    token: string;
+    expiresAt: number;
+}
+
+export interface AuthorizationResponse {
+    account: Pick<AccountInfo, "firstName" | "lastName">;
+    session: Session;
+}

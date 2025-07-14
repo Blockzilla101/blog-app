@@ -4,11 +4,16 @@ import TodoList from "../components/TodoList.vue";
 import { onMounted, ref } from "vue";
 import { Backend } from "../api/backend.ts";
 import type { AccountInfo } from "../api/types.ts";
+import { checkIfLoggedIn } from "../api/util.ts";
 
 const account = ref<AccountInfo | null>(null);
 
 onMounted(async () => {
-    account.value = await Backend.fetchSessionInfo();
+    if (await checkIfLoggedIn()) {
+        account.value = await Backend.fetchSessionInfo();
+    } else {
+        window.location.pathname = "/login";
+    }
 });
 
 </script>

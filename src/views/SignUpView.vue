@@ -1,8 +1,8 @@
 <script lang="ts" setup>
 
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { ApiError, Backend } from "../api/backend.ts";
-import { applyErrorsToRef } from "../api/util.ts";
+import { applyErrorsToRef, checkIfLoggedIn } from "../api/util.ts";
 
 const errors = ref({
     firstName: "",
@@ -50,9 +50,14 @@ async function formSubmit(event: Event) {
     }
     clearErrors();
 
-    // todo save session & redirect to todo view
-    console.log("Form submitted");
+    window.location.pathname = "/app";
 }
+
+onMounted(async () => {
+    if (await checkIfLoggedIn()) {
+        window.location.pathname = "/app";
+    }
+});
 
 </script>
 
