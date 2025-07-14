@@ -11,8 +11,11 @@ const props = defineProps({
 });
 
 defineEmits({
+    // @ts-ignore
     focusOut: (item: TodoItem) => Promise<void>,
+    // @ts-ignore
     complete: (item: TodoItem) => Promise<void>,
+    // @ts-ignore
     delete: (uuid: string) => Promise<void>,
 });
 
