@@ -16,6 +16,11 @@ function handleSessionCreate(data: AuthorizationResponse) {
     localStorage.setItem("account", JSON.stringify(data.account));
 }
 
+function removeSession() {
+    localStorage.removeItem("session");
+    localStorage.removeItem("account");
+}
+
 export function getSessionToken(): string | null {
     const data = localStorage.getItem("session");
     if (!data) return null;
@@ -96,7 +101,21 @@ export class Backend {
     }
 
     public static async logout() {
-        throw new Error("not implemented");
+        try {
+            await axios.get(`${base}/session/revoke`, {
+                headers: {
+                    Authorization: `Bearer ${getSessionToken()}`,
+                },
+            });
+        } catch (e) {
+            if (e instanceof AxiosError) {
+                throw new ApiError(e);
+            }
+            console.error("Unknown error refreshing session", e);
+            throw new Error("Unknown API error");
+        } finally {
+            removeSession();
+        }
     }
 
     public static async fetchSessionInfo(): Promise<AccountInfo> {

@@ -1,4 +1,22 @@
 <script lang="ts" setup>
+
+import { onMounted, ref } from "vue";
+import { checkIfLoggedIn } from "./api/util.ts";
+import type { AuthorizationResponse } from "./api/types.ts";
+import AccountMenu from "./components/AccountMenu.vue";
+
+const isLoggedIn = ref(false);
+
+const account = ref<AuthorizationResponse["account"] | null>(null);
+
+onMounted(async () => {
+    isLoggedIn.value = await checkIfLoggedIn();
+
+    if (isLoggedIn.value) {
+        account.value = JSON.parse(localStorage.getItem("account")!);
+    }
+});
+
 </script>
 
 <template>
@@ -11,7 +29,15 @@
                 <h1>Todo App</h1>
             </div>
             <ul>
-                <li>
+                <li v-if="isLoggedIn">
+                    <AccountMenu :account="account!"></AccountMenu>
+                </li>
+                <li v-else-if="$route.path === '/login'">
+                    <router-link class="link" to="/sign-up">
+                        <span>Sign Up</span>
+                    </router-link>
+                </li>
+                <li v-else>
                     <router-link class="link" to="/login">
                         <span>Login</span>
                     </router-link>
@@ -60,16 +86,18 @@ nav ul {
     height: 100%;
 }
 
-nav ul li {
+.link {
     position: relative;
     display: flex;
     align-items: center;
+    padding: 0 1.5em;
+    height: 100%;
+    overflow: hidden;
     font-size: 1.2em;
     transition: 0.2s ease-in-out;
-    overflow: hidden;
 }
 
-nav ul li::before {
+.link::before {
     position: absolute;
     content: "";
     background: var(--foreground-color);
@@ -81,19 +109,12 @@ nav ul li::before {
     z-index: -1;
 }
 
-nav ul li:hover::before {
+.link:hover::before {
     transform: translateY(0);
 }
 
-nav ul li:hover {
+.link:hover {
     color: var(--background-color);
-}
-
-.link {
-    display: flex;
-    align-items: center;
-    padding: 0 1.5em;
-    height: 100%;
 }
 
 footer {
