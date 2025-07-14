@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 import type { TodoItem } from "../api/types.ts";
-import { onMounted, ref, type VNodeRef } from "vue";
+import { computed, onMounted, ref, type VNodeRef } from "vue";
 
 const props = defineProps({
     isNew: {
@@ -10,9 +10,9 @@ const props = defineProps({
     },
 });
 
-defineEmits({
+const emit = defineEmits({
     // @ts-ignore
-    focusOut: (item: TodoItem) => Promise<void>,
+    update: (item: TodoItem) => Promise<void>,
     // @ts-ignore
     complete: (item: TodoItem) => Promise<void>,
     // @ts-ignore
@@ -26,6 +26,31 @@ const itemModel = defineModel({
     required: true,
 });
 
+const dateInput = ref<HTMLInputElement | null>(null);
+
+const dateInputValue = computed(() => {
+    if (itemModel.value.dueDate == 0) {
+        return "";
+    }
+    return new Date(itemModel.value.dueDate).toISOString()
+                                            .slice(0, 10);
+});
+
+const pastDue = computed(() => {
+    return itemModel.value.dueDate < Date.now() && itemModel.value.dueDate !== 0 && !itemModel.value.completed;
+});
+
+async function showPicker() {
+    if (dateInput.value) {
+        dateInput.value.showPicker();
+    }
+}
+
+function datePicked(target: HTMLInputElement) {
+    itemModel.value.dueDate = target.valueAsNumber;
+    emit("update", itemModel.value);
+}
+
 onMounted(() => {
     if (props.isNew) {
         inputElement.value?.focus();
@@ -37,8 +62,14 @@ onMounted(() => {
 <template>
     <li :class="{ completed: itemModel.completed }" class="todo-item">
         <input ref="inputElement" v-model="itemModel.title" class="title" maxlength="50"
-               @focusout="$emit('focusOut', itemModel)">
+               @focusout="$emit('update', itemModel)">
+        <span :class="{ 'error-text':pastDue }" class="due-date">{{ dateInputValue }}</span>
         <div class="todo-actions">
+            <button class="icon-btn icon-btn-primary flex">
+                <input ref="dateInput" :value="dateInputValue" class="opacity-0 w-0"
+                       type="date" @change="datePicked($event.target as HTMLInputElement)">
+                <img alt="Due Date" src="/calendar-dark.svg" @click="showPicker">
+            </button>
             <button class="icon-btn icon-btn-primary">
                 <img alt="Complete Todo" src="/checkmark-dark.svg" @click="$emit('complete', itemModel)">
             </button>
@@ -66,7 +97,7 @@ onMounted(() => {
 
 .todo-item .title {
     flex-grow: 1;
-    min-width: 5em;
+    min-width: 2em;
     outline: none;
 }
 
@@ -101,7 +132,20 @@ onMounted(() => {
 }
 
 .icon-btn img {
-    height: 1.5em;
+    height: 1.5rem;
+}
+
+.due-date {
+    opacity: 1;
+    font-size: 0.8em;
+    transition: 0.2s ease-in-out;
+    text-wrap: nowrap;
+}
+
+.todo-item:hover .due-date, .todo-item:focus-within .due-date {
+    opacity: 0;
+    width: 0;
+    transition: 0s;
 }
 
 </style>

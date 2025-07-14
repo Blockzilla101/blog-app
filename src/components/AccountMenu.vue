@@ -26,7 +26,10 @@ async function handleLogout() {
 
 <template>
     <div class="container">
-        <button class="username" @click="menuShown = !menuShown">{{ account.firstName }} {{ account.lastName }}</button>
+        <button class="username" @click="menuShown = !menuShown">
+            <span>{{ account.firstName }}</span>
+            <span class="last-name">{{ account.lastName }}</span>
+        </button>
         <Transition name="slide-up">
             <div v-show="menuShown" class="menu">
                 <button class="logout-btn" @click="handleLogout">
@@ -70,6 +73,15 @@ async function handleLogout() {
 
 .username {
     cursor: pointer;
+    display: flex;
+    gap: 0.25em
+}
+
+@media (max-width: 425px) {
+    .last-name {
+        display: none;
+    }
+
 }
 
 </style>

@@ -19,6 +19,7 @@ function addTodo() {
         title: "",
         uuid: "new-todo",
         completed: false,
+        dueDate: 0,
     };
 }
 
@@ -29,10 +30,22 @@ async function onTodoUpdate(item: TodoItemObj) {
             return;
         }
 
-        const item = await Backend.createTodo(props.list.uuid, { title: newTodo.value.title });
+        const item = await Backend.createTodo(props.list.uuid, {
+            title: newTodo.value.title,
+            dueDate: newTodo.value.dueDate,
+        });
+
         props.list.items.unshift(item);
 
         newTodo.value = null;
+        return;
+    }
+
+    if (item.title.length === 0) {
+        const idx = props.list.items.findIndex(i => i.uuid === item.uuid);
+        props.list.items.splice(idx, 1);
+
+        await Backend.deleteTodo(props.list.uuid, item.uuid);
         return;
     }
 
@@ -57,7 +70,7 @@ async function onTodoComplete(item: TodoItemObj) {
         <div class="title-container">
             <h1>{{ $props.list.name }}</h1>
             <button class="icon-btn icon-btn-primary" @click="addTodo">
-                <img alt="Add Todo" src="/plus.svg">
+                <img alt="Add Todo" src="/plus-dark.svg">
             </button>
         </div>
 
@@ -66,11 +79,11 @@ async function onTodoComplete(item: TodoItemObj) {
         </div>
 
         <ul class="todo-items">
-            <TodoItem v-if="newTodo != null" v-model="newTodo" :is-new="true" @focus-out="onTodoUpdate">
+            <TodoItem v-if="newTodo != null" v-model="newTodo" :is-new="true" @update="onTodoUpdate">
             </TodoItem>
             <TodoItem v-for="(item, idx) in list.items" :key="item.uuid"
                       v-model="list.items[idx]"
-                      @complete="onTodoComplete" @delete="onTodoDelete" @focus-out="onTodoUpdate">
+                      @complete="onTodoComplete" @delete="onTodoDelete" @update="onTodoUpdate">
             </TodoItem>
         </ul>
     </section>
@@ -131,7 +144,7 @@ async function onTodoComplete(item: TodoItemObj) {
 
 @media (max-width: 425px) {
     .list-container {
-        font-size: 0.8em;
+        font-size: 0.9em;
     }
 }
 

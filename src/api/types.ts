@@ -34,6 +34,7 @@ export interface TodoList {
 export interface TodoItem {
     uuid: string;
     title: string;
+    dueDate: number;
     completed: boolean;
 }
 

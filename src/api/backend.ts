@@ -135,7 +135,7 @@ export class Backend {
         }
     }
 
-    public static async createTodo(listUuid: string, data: { title: string }): Promise<TodoItem> {
+    public static async createTodo(listUuid: string, data: Omit<TodoItem, "uuid" | "completed">): Promise<TodoItem> {
         try {
             const res = await axios.post(`${base}/todo/create/${listUuid}`, data, {
                 headers: {
