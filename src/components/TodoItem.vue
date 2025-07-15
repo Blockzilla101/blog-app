@@ -140,6 +140,7 @@ onMounted(() => {
     font-size: 0.8em;
     transition: 0.2s ease-in-out;
     text-wrap: nowrap;
+    padding-left: 0.5em;
 }
 
 .todo-item:hover .due-date, .todo-item:focus-within .due-date {
