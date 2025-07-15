@@ -57,11 +57,7 @@ export class Backend {
 
             return res.data;
         } catch (e) {
-            if (e instanceof AxiosError) {
-                throw new ApiError(e);
-            }
-            console.error("Unknown error while signing up", e);
-            throw new Error("Unknown API error");
+            throw this.createError(e);
         }
     }
 
@@ -72,11 +68,7 @@ export class Backend {
 
             return res.data;
         } catch (e) {
-            if (e instanceof AxiosError) {
-                throw new ApiError(e);
-            }
-            console.error("Unknown error while login", e);
-            throw new Error("Unknown API error");
+            throw this.createError(e);
         }
     }
 
@@ -84,7 +76,7 @@ export class Backend {
         try {
             const res = await axios.get(`${base}/session/refresh`, {
                 headers: {
-                    Authorization: `Bearer ${getSessionToken()}`,
+                    Authorization: getSessionToken(),
                 },
             });
 
@@ -92,11 +84,7 @@ export class Backend {
 
             return res.data;
         } catch (e) {
-            if (e instanceof AxiosError) {
-                throw new ApiError(e);
-            }
-            console.error("Unknown error refreshing session", e);
-            throw new Error("Unknown API error");
+            throw this.createError(e);
         }
     }
 
@@ -104,17 +92,11 @@ export class Backend {
         try {
             await axios.get(`${base}/session/revoke`, {
                 headers: {
-                    Authorization: `Bearer ${getSessionToken()}`,
+                    Authorization: getSessionToken(),
                 },
             });
         } catch (e) {
-            if (e instanceof AxiosError) {
-                throw new ApiError(e);
-            }
-            console.error("Unknown error refreshing session", e);
-            throw new Error("Unknown API error");
-        } finally {
-            removeSession();
+            throw this.createError(e);
         }
     }
 
@@ -122,16 +104,12 @@ export class Backend {
         try {
             const res = await axios.get(`${base}/account/info`, {
                 headers: {
-                    Authorization: `Bearer ${getSessionToken()}`,
+                    Authorization: getSessionToken(),
                 },
             });
             return res.data;
         } catch (e) {
-            if (e instanceof AxiosError) {
-                throw new ApiError(e);
-            }
-            console.error("Unknown error while login", e);
-            throw new Error("Unknown API error");
+            throw this.createError(e);
         }
     }
 
@@ -139,17 +117,13 @@ export class Backend {
         try {
             const res = await axios.post(`${base}/todo/create/${listUuid}`, data, {
                 headers: {
-                    Authorization: `Bearer ${getSessionToken()}`,
+                    Authorization: getSessionToken(),
                 },
             });
 
             return res.data;
         } catch (e) {
-            if (e instanceof AxiosError) {
-                throw new ApiError(e);
-            }
-            console.error("Unknown error while login", e);
-            throw new Error("Unknown API error");
+            throw this.createError(e);
         }
     }
 
@@ -157,17 +131,13 @@ export class Backend {
         try {
             const res = await axios.patch(`${base}/todo/update/${listUuid}/${todoUuid}`, data, {
                 headers: {
-                    Authorization: `Bearer ${getSessionToken()}`,
+                    Authorization: getSessionToken(),
                 },
             });
 
             return res.data;
         } catch (e) {
-            if (e instanceof AxiosError) {
-                throw new ApiError(e);
-            }
-            console.error("Unknown error while login", e);
-            throw new Error("Unknown API error");
+            throw this.createError(e);
         }
     }
 
@@ -175,15 +145,26 @@ export class Backend {
         try {
             await axios.delete(`${base}/todo/delete/${listUuid}/${todoUuid}`, {
                 headers: {
-                    Authorization: `Bearer ${getSessionToken()}`,
+                    Authorization: getSessionToken(),
                 },
             });
         } catch (e) {
-            if (e instanceof AxiosError) {
-                throw new ApiError(e);
-            }
-            console.error("Unknown error while login", e);
-            throw new Error("Unknown API error");
+            throw this.createError(e);
         }
+    }
+
+    private static createError(e: unknown) {
+        if (e instanceof AxiosError) {
+            if (e.status === 403) {
+                removeSession();
+                console.warn("Session expired, redirecting to login");
+                window.location.pathname = "/login";
+                return;
+            }
+
+            throw new ApiError(e);
+        }
+        console.error("Unknown error api error", e);
+        return new Error("Unknown API error");
     }
 }
