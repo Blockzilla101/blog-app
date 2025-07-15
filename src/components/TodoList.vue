@@ -2,7 +2,7 @@
 
 import TodoItem from "./TodoItem.vue";
 import type { TodoItem as TodoItemObj, TodoList } from "../api/types.ts";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { Backend } from "../api/backend.ts";
 
 const props = defineProps({
@@ -13,6 +13,26 @@ const props = defineProps({
 });
 
 const newTodo = ref<TodoItemObj | null>(null);
+
+const completedIndices = computed(() => {
+    const arr = [];
+    for (let i = 0; i < props.list.items.length; i++) {
+        if (props.list.items[i].completed) {
+            arr.push(i);
+        }
+    }
+    return arr;
+});
+
+const incompleteIndices = computed(() => {
+    const arr = [];
+    for (let i = 0; i < props.list.items.length; i++) {
+        if (!props.list.items[i].completed) {
+            arr.push(i);
+        }
+    }
+    return arr;
+});
 
 function addTodo() {
     newTodo.value = {
@@ -81,7 +101,18 @@ async function onTodoComplete(item: TodoItemObj) {
         <ul class="todo-items">
             <TodoItem v-if="newTodo != null" v-model="newTodo" :is-new="true" @update="onTodoUpdate">
             </TodoItem>
-            <TodoItem v-for="(item, idx) in list.items" :key="item.uuid"
+            <TodoItem v-for="idx in incompleteIndices" :key="list.items[idx].uuid"
+                      v-model="list.items[idx]"
+                      @complete="onTodoComplete" @delete="onTodoDelete" @update="onTodoUpdate">
+            </TodoItem>
+        </ul>
+
+        <div v-if="completedIndices.length > 0" class="divider">
+            <span>Completed</span>
+        </div>
+
+        <ul class="todo-items">
+            <TodoItem v-for="idx in completedIndices" :key="list.items[idx].uuid"
                       v-model="list.items[idx]"
                       @complete="onTodoComplete" @delete="onTodoDelete" @update="onTodoUpdate">
             </TodoItem>
@@ -133,6 +164,11 @@ async function onTodoComplete(item: TodoItemObj) {
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+}
+
+.divider {
+    margin: 1em 0;
+    font-weight: bold;
 }
 
 @media (max-width: 600px) {
