@@ -48,18 +48,19 @@ async function handleLogout() {
 }
 
 .menu {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
     position: absolute;
     height: 100%;
     width: 100%;
     left: 0;
     top: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
     background-color: var(--background-color);
     border: 2px solid var(--foreground-color);
     border-right: none;
+    z-index: 1000;
 }
 
 .logout-btn {

@@ -27,13 +27,6 @@ body {
     background-image: url("/background.svg");
 }
 
-main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-}
-
 .card-section {
     display: flex;
     flex-direction: column;

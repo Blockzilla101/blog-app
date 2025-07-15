@@ -56,9 +56,8 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-@import "tailwindcss";
-
 nav {
+    position: relative;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -69,6 +68,7 @@ nav {
     padding: 0 0 0 1em;
     height: 4em;
     font-weight: 800;
+    z-index: 1000;
 }
 
 nav .logo {
@@ -92,6 +92,15 @@ nav ul {
     padding: 0 1.5em;
     height: 100%;
     font-size: 1.2em;
+}
+
+main {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    z-index: 0;
 }
 
 footer {
