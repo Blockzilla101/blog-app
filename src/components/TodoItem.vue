@@ -61,7 +61,8 @@ onMounted(() => {
 
 <template>
     <li :class="{ completed: itemModel.completed }" class="todo-item">
-        <input ref="inputElement" v-model="itemModel.title" class="title" maxlength="50"
+        <input ref="inputElement" v-model="itemModel.title" :class="{ completed: itemModel.completed }" class="title"
+               maxlength="50"
                @focusout="$emit('update', itemModel)">
         <span :class="{ 'error-text':pastDue }" class="due-date">{{ dateInputValue }}</span>
         <div class="todo-actions">
