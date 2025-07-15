@@ -182,6 +182,15 @@ main {
     filter: invert(42%) sepia(66%) saturate(516%) hue-rotate(309deg) brightness(111%) contrast(117%);
 }
 
+.hover-invert {
+    transition: 0.2s ease-in-out;
+}
+
+.hover-invert:hover {
+    color: var(--background-color);
+    background-color: var(--foreground-color);
+}
+
 @media (max-width: 600px) {
     .card-section {
         margin-top: 0;

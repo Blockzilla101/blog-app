@@ -26,13 +26,13 @@ async function handleLogout() {
 
 <template>
     <div class="container">
-        <button class="username" @click="menuShown = !menuShown">
+        <button :class="{ 'active': menuShown }" class="username hover-invert" @click="menuShown = !menuShown">
             <span>{{ account.firstName }}</span>
             <span class="last-name">{{ account.lastName }}</span>
         </button>
         <Transition name="slide-up">
             <div v-show="menuShown" class="menu">
-                <button class="logout-btn" @click="handleLogout">
+                <button class="logout-btn hover-invert" @click="handleLogout">
                     Logout
                 </button>
             </div>
@@ -43,12 +43,8 @@ async function handleLogout() {
 <style scoped>
 
 .container {
-    display: flex;
-    align-items: center;
     position: relative;
-    overflow: unset;
     height: 100%;
-    padding: 0 1em;
 }
 
 .menu {
@@ -72,16 +68,23 @@ async function handleLogout() {
 }
 
 .username {
-    cursor: pointer;
     display: flex;
-    gap: 0.25em
+    align-items: center;
+    cursor: pointer;
+    gap: 0.25em;
+    padding: 0 1em;
+    height: 100%;
+}
+
+.active {
+    background-color: var(--foreground-color);
+    color: var(--background-color);
 }
 
 @media (max-width: 425px) {
     .last-name {
         display: none;
     }
-
 }
 
 </style>

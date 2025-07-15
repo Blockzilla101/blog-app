@@ -33,12 +33,12 @@ onMounted(async () => {
                     <AccountMenu :account="account!"></AccountMenu>
                 </li>
                 <li v-else-if="$route.path === '/login'">
-                    <router-link class="link" to="/sign-up">
+                    <router-link class="link hover-invert" to="/sign-up">
                         <span>Sign Up</span>
                     </router-link>
                 </li>
                 <li v-else>
-                    <router-link class="link" to="/login">
+                    <router-link class="link hover-invert" to="/login">
                         <span>Login</span>
                     </router-link>
                 </li>
@@ -87,34 +87,11 @@ nav ul {
 }
 
 .link {
-    position: relative;
     display: flex;
     align-items: center;
     padding: 0 1.5em;
     height: 100%;
-    overflow: hidden;
     font-size: 1.2em;
-    transition: 0.2s ease-in-out;
-}
-
-.link::before {
-    position: absolute;
-    content: "";
-    background: var(--foreground-color);
-    width: 100%;
-    height: 100%;
-    left: 0;
-    transform: translateY(100%);
-    transition: 0.2s ease-in-out;
-    z-index: -1;
-}
-
-.link:hover::before {
-    transform: translateY(0);
-}
-
-.link:hover {
-    color: var(--background-color);
 }
 
 footer {
