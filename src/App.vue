@@ -26,7 +26,7 @@ onMounted(async () => {
                 <div>
                     <img alt="logo" src="/app-logo-dark.svg">
                 </div>
-                <h1>Todo App</h1>
+                <h1>Blog App</h1>
             </div>
             <ul>
                 <li v-if="isLoggedIn">
@@ -74,11 +74,13 @@ nav {
 nav .logo {
     display: flex;
     font-size: 1.5em;
-    gap: 0.5em
+    gap: 0.5em;
+    align-items: center;
 }
 
 nav .logo img {
-    max-height: 1.5em;
+    display: block;
+    height: 1.2em;
 }
 
 nav ul {
