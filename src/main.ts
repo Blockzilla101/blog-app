@@ -6,8 +6,12 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import SignUpView from "./views/SignUpView.vue";
 import LoginView from "./views/LoginView.vue";
-import TodoView from "./views/TodoView.vue";
 import PageNotFound from "./views/PageNotFound.vue";
+import UserSettingsView from "./views/UserSettingsView.vue";
+import BlogsView from "./views/BlogsView.vue";
+import BlogView from "./views/BlogView.vue";
+import EditBlogView from "./views/EditBlogView.vue";
+import UserBlogsView from "./views/UserBlogsView.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -15,7 +19,11 @@ const router = createRouter({
         { path: "/", redirect: "/login" },
         { path: "/sign-up", component: SignUpView },
         { path: "/login", component: LoginView },
-        { path: "/app", component: TodoView },
+        { path: "/settings", component: UserSettingsView },
+        { path: "/blogs", component: BlogsView },
+        { path: "/blogs/me", component: UserBlogsView },
+        { path: "/blog/:uuid", component: BlogView },
+        { path: "/blog/edit/:uuid", component: EditBlogView },
         { path: "/:pathMatch(.*)*", component: PageNotFound },
     ],
 });
