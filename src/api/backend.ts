@@ -1,12 +1,4 @@
-import type {
-    AccountInfo,
-    AuthorizationResponse,
-    ErrorItem,
-    LoginData,
-    NewAccountData,
-    Session,
-    TodoItem,
-} from "./types.ts";
+import type { AccountInfo, AuthorizationResponse, ErrorItem, LoginData, NewAccountData, Session } from "./types.ts";
 import axios, { AxiosError } from "axios";
 
 const base = import.meta.env.VITE_API_BASE;
@@ -113,37 +105,9 @@ export class Backend {
         }
     }
 
-    public static async createTodo(listUuid: string, data: Omit<TodoItem, "uuid" | "completed">): Promise<TodoItem> {
+    public static async updateAccount(account: Omit<AccountInfo, "blogUuids">): Promise<void> {
         try {
-            const res = await axios.post(`${base}/todo/create/${listUuid}`, data, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
-            });
-
-            return res.data;
-        } catch (e) {
-            throw this.createError(e);
-        }
-    }
-
-    public static async updateTodo(listUuid: string, todoUuid: string, data: Partial<TodoItem>): Promise<TodoItem> {
-        try {
-            const res = await axios.patch(`${base}/todo/update/${listUuid}/${todoUuid}`, data, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
-            });
-
-            return res.data;
-        } catch (e) {
-            throw this.createError(e);
-        }
-    }
-
-    public static async deleteTodo(listUuid: string, todoUuid: string): Promise<void> {
-        try {
-            await axios.delete(`${base}/todo/delete/${listUuid}/${todoUuid}`, {
+            await axios.patch(`${base}/account/update`, account, {
                 headers: {
                     Authorization: getSessionToken(),
                 },

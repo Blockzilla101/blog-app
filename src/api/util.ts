@@ -30,3 +30,4 @@ export async function checkIfLoggedIn(): Promise<boolean> {
         return false;
     }
 }
+

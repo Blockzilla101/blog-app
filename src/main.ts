@@ -22,8 +22,8 @@ const router = createRouter({
         { path: "/settings", component: UserSettingsView },
         { path: "/blogs", component: BlogsView },
         { path: "/blogs/me", component: UserBlogsView },
-        { path: "/blog/:uuid", component: BlogView },
-        { path: "/blog/edit/:uuid", component: EditBlogView },
+        { path: "/blog/:uuid", component: BlogView, props: true },
+        { path: "/blog/edit/:uuid", component: EditBlogView, props: true },
         { path: "/:pathMatch(.*)*", component: PageNotFound },
     ],
 });

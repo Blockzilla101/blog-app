@@ -50,7 +50,7 @@ async function formSubmit(event: Event) {
     }
     clearErrors();
 
-    window.location.pathname = "/app";
+    window.location.pathname = "/settings";
 }
 
 onMounted(async () => {

@@ -22,20 +22,25 @@ export interface AccountInfo {
     uuid: string;
     firstName: string,
     lastName: string,
-    todoLists: TodoList[]
+    email: string;
+    avatar?: string;
+    bio: string;
+    blogUuids: string[];
 }
 
-export interface TodoList {
-    uuid: string;
-    name: string;
-    items: TodoItem[];
+export type PartialAccountInfo = Omit<AccountInfo, "blogUuids" | "email">;
+
+export interface BlogList {
+    blogs: BlogItem[];
 }
 
-export interface TodoItem {
+export interface BlogItem {
     uuid: string;
     title: string;
-    dueDate: number;
-    completed: boolean;
+    content: string;
+    createdAt: number;
+    author: PartialAccountInfo;
+    draft?: boolean;
 }
 
 export interface Session {

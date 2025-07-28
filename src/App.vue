@@ -47,7 +47,23 @@ onMounted(async () => {
     </header>
 
     <main>
-        <RouterView></RouterView>
+        <RouterView v-slot="{ Component }">
+            <template v-if="Component">
+                <Transition name="fade">
+                    <KeepAlive>
+                        <Suspense>
+                            <component :is="Component"></component>
+
+                            <!--                            <template #fallback>-->
+                            <!--                                <section class="card-section card-center">-->
+                            <!--                                    <h1>Loading</h1>-->
+                            <!--                                </section>-->
+                            <!--                            </template>-->
+                        </Suspense>
+                    </KeepAlive>
+                </Transition>
+            </template>
+        </RouterView>
     </main>
 
     <footer>
