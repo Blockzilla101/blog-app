@@ -188,6 +188,7 @@ body {
     .card-section {
         margin-top: 0;
         width: 100%;
+        border-radius: 0;
     }
 
     .card-center {

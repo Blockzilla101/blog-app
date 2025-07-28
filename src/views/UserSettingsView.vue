@@ -126,9 +126,6 @@ async function formSubmit(event: Event) {
 
 <style scoped>
 
-.card-section {
-    width: 40em;
-}
 
 .settings-container {
     display: flex;

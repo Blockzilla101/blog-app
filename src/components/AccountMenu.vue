@@ -13,6 +13,10 @@ defineProps({
 
 const menuShown = ref(false);
 
+function onClick() {
+    menuShown.value = false;
+}
+
 async function handleLogout() {
     try {
         await Backend.logout();
@@ -22,17 +26,30 @@ async function handleLogout() {
     window.location.pathname = "/login";
 }
 
+document.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    if (!target.closest("#account-menu")) {
+        menuShown.value = false;
+    }
+});
+
 </script>
 
 <template>
-    <div class="container">
+    <div id="account-menu" class="container">
         <button :class="{ 'active': menuShown }" class="username hover-invert" @click="menuShown = !menuShown">
             <span>{{ account.firstName }}</span>
             <span class="last-name">{{ account.lastName }}</span>
         </button>
         <Transition name="slide-up">
             <div v-show="menuShown" class="menu">
-                <button class="logout-btn hover-invert" @click="handleLogout">
+                <RouterLink class="link hover-invert" to="/blogs/me" @click="onClick">
+                    <span>Blogs</span>
+                </RouterLink>
+                <RouterLink class="link hover-invert" to="/settings" @click="onClick">
+                    <span>Settings</span>
+                </RouterLink>
+                <button class="link hover-invert" @click="handleLogout">
                     Logout
                 </button>
             </div>
@@ -49,7 +66,6 @@ async function handleLogout() {
 
 .menu {
     position: absolute;
-    height: 100%;
     width: 100%;
     left: 0;
     top: 100%;
@@ -63,9 +79,12 @@ async function handleLogout() {
     z-index: 1000;
 }
 
-.logout-btn {
+.link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    height: 100%;
+    height: 3em;
 }
 
 .username {
