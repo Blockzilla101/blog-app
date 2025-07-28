@@ -72,7 +72,7 @@ onMounted(async () => {
                     <label>First Name</label>
                     <span class="error-text">{{ errors.firstName }}</span>
                 </div>
-                <input v-model="firstName" maxlength="50" minlength="2" placeholder="First name" required type="text" />
+                <input v-model="firstName" maxlength="25" minlength="2" placeholder="First name" required type="text" />
             </div>
 
             <div class="input-container">
@@ -80,7 +80,7 @@ onMounted(async () => {
                     <label>Last Name</label>
                     <span class="error-text">{{ errors.lastName }}</span>
                 </div>
-                <input v-model="lastName" maxlength="50" minlength="2" placeholder="Last name" required type="text" />
+                <input v-model="lastName" maxlength="25" minlength="2" placeholder="Last name" required type="text" />
             </div>
 
             <div class="input-container">

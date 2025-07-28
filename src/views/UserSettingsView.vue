@@ -4,6 +4,7 @@ import { ref } from "vue";
 import type { AccountInfo } from "../api/types.ts";
 import { ApiError, Backend } from "../api/backend.ts";
 import { applyErrorsToRef } from "../api/util.ts";
+import User from "../components/User.vue";
 
 const account = ref<AccountInfo>(await Backend.fetchSessionInfo());
 
@@ -52,13 +53,7 @@ async function formSubmit(event: Event) {
 <template>
     <section class="card-section">
         <div class="settings-container">
-            <div class="avatar-container">
-                <img alt="Profile Picture" class="avatar" src="/avatar-default.svg" />
-                <div class="avatar-text">
-                    <h2>{{ account.firstName }} {{ account.lastName }}</h2>
-                    <p>{{ account.bio }}</p>
-                </div>
-            </div>
+            <User :user="account"></User>
             <form class="form" @submit="formSubmit">
                 <div class="input-container">
                     <div class="label-container">
@@ -126,41 +121,12 @@ async function formSubmit(event: Event) {
 
 <style scoped>
 
-
 .settings-container {
     display: flex;
     flex-direction: column;
     gap: 2em;
     align-items: center;
     width: 100%;
-}
-
-.avatar-container {
-    max-width: 35em;
-    display: flex;
-    align-items: center;
-}
-
-.avatar-text h2 {
-    font-size: 1.5em;
-    font-weight: 800;
-    color: var(--text-color);
-    word-wrap: anywhere;
-}
-
-.avatar-text p {
-    font-size: 1em;
-    color: var(--text-color);
-    text-align: start;
-    overflow-wrap: anywhere;
-}
-
-.avatar {
-    width: 10em;
-    height: 10em;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 1em;
 }
 
 </style>
