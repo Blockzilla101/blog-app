@@ -132,10 +132,6 @@ onMounted(() => {
     width: unset;
 }
 
-.icon-btn img {
-    height: 1.5rem;
-}
-
 .due-date {
     opacity: 1;
     font-size: 0.8em;

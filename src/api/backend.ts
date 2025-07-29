@@ -1,5 +1,14 @@
-import type { AccountInfo, AuthorizationResponse, ErrorItem, LoginData, NewAccountData, Session } from "./types.ts";
+import type {
+    AccountInfo,
+    AuthorizationResponse,
+    BlogItem,
+    ErrorItem,
+    LoginData,
+    NewAccountData,
+    Session,
+} from "./types.ts";
 import axios, { AxiosError } from "axios";
+import { sampleBlog } from "./mock.ts";
 
 const base = import.meta.env.VITE_API_BASE;
 
@@ -92,7 +101,7 @@ export class Backend {
         }
     }
 
-    public static async fetchSessionInfo(): Promise<AccountInfo> {
+    public static async fetchSessionAccount(): Promise<AccountInfo> {
         try {
             const res = await axios.get(`${base}/account/info`, {
                 headers: {
@@ -112,6 +121,21 @@ export class Backend {
                     Authorization: getSessionToken(),
                 },
             });
+        } catch (e) {
+            throw this.createError(e);
+        }
+    }
+
+    public static async fetchBlog(uuid: string): Promise<BlogItem> {
+        try {
+            // todo implement
+            // const res = await axios.get(`${base}/blog/${uuid}`, {
+            //     headers: {
+            //         Authorization: getSessionToken(),
+            //     },
+            // });
+            // return res.data;
+            return sampleBlog(uuid, "test-uuid");
         } catch (e) {
             throw this.createError(e);
         }

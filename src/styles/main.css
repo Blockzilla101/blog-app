@@ -35,12 +35,12 @@ body {
     background-color: var(--card-background-color);
     backdrop-filter: blur(12px);
     border-radius: 1em;
-    width: 35em;
     padding: 1.5em 3em;
 }
 
 .card-center {
     margin: 20em 0;
+    width: 35em;
 }
 
 .card-section h1 {
@@ -167,6 +167,11 @@ body {
     transition: 0.2s ease-in-out;
 }
 
+.icon-btn img {
+    height: 1.5rem;
+    min-width: 1.5rem;
+}
+
 .icon-btn-primary:hover {
     filter: invert(42%) sepia(76%) saturate(1842%) hue-rotate(163deg) brightness(97%) contrast(101%);
 }
@@ -187,12 +192,12 @@ body {
 @media (max-width: 600px) {
     .card-section {
         margin-top: 0;
-        width: 100%;
         border-radius: 0;
     }
 
     .card-center {
         margin: auto 0;
+        width: 100%;
     }
 }
 

@@ -6,7 +6,7 @@ import { ApiError, Backend } from "../api/backend.ts";
 import { applyErrorsToRef } from "../api/util.ts";
 import User from "../components/User.vue";
 
-const account = ref<AccountInfo>(await Backend.fetchSessionInfo());
+const account = ref<AccountInfo>(await Backend.fetchSessionAccount());
 
 // todo implement profile picture upload
 
