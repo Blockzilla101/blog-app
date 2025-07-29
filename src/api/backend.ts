@@ -146,7 +146,7 @@ export class Backend {
 
     private static createError(e: unknown) {
         if (e instanceof AxiosError) {
-            if (e.status === 403) {
+            if (e.status === 401) {
                 removeSession();
                 console.warn("Session expired, redirecting to login");
                 window.location.pathname = "/login";
