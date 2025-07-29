@@ -32,6 +32,9 @@ export type PartialAccountInfo = Omit<AccountInfo, "blogUuids" | "email">;
 
 export interface BlogList {
     blogs: BlogItem[];
+    hasNext: boolean,
+    next: string,
+    total: number;
 }
 
 export interface BlogItem {
@@ -40,7 +43,6 @@ export interface BlogItem {
     content: string;
     createdAt: number;
     author: PartialAccountInfo;
-    draft?: boolean;
 }
 
 export interface Session {

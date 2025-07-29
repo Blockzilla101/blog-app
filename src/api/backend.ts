@@ -2,13 +2,13 @@ import type {
     AccountInfo,
     AuthorizationResponse,
     BlogItem,
+    BlogList,
     ErrorItem,
     LoginData,
     NewAccountData,
     Session,
 } from "./types.ts";
 import axios, { AxiosError } from "axios";
-import { sampleBlog } from "./mock.ts";
 
 const base = import.meta.env.VITE_API_BASE;
 
@@ -129,16 +129,72 @@ export class Backend {
         }
     }
 
+    public static async fetchBlogs(opts: Partial<{ author: string, after: string, limit: number }>): Promise<BlogList> {
+        try {
+            const params = new URLSearchParams();
+            if (opts.author) params.append("author", opts.author);
+            if (opts.after) params.append("after", opts.after);
+            if (opts.limit) params.append("limit", opts.limit.toString());
+
+            const res = await axios.get(`${base}/blog/blogs`, {
+                headers: {
+                    Authorization: getSessionToken(),
+                },
+                params,
+            });
+
+            return res.data;
+        } catch (e) {
+            throw this.createError(e);
+        }
+    }
+
     public static async fetchBlog(uuid: string): Promise<BlogItem> {
         try {
-            // todo implement
-            // const res = await axios.get(`${base}/blog/${uuid}`, {
-            //     headers: {
-            //         Authorization: getSessionToken(),
-            //     },
-            // });
-            // return res.data;
-            return sampleBlog(uuid);
+            const res = await axios.get(`${base}/blog/by-uuid/${uuid}`, {
+                headers: {
+                    Authorization: getSessionToken(),
+                },
+            });
+            return res.data;
+        } catch (e) {
+            throw this.createError(e);
+        }
+    }
+
+    public static async createBlog(data: Omit<BlogItem, "uuid" | "createdAt" | "author">): Promise<BlogItem> {
+        try {
+            const res = await axios.post(`${base}/blog/create`, data, {
+                headers: {
+                    Authorization: getSessionToken(),
+                },
+            });
+            return res.data;
+        } catch (e) {
+            throw this.createError(e);
+        }
+    }
+
+    public static async updateBlog(uuid: string, data: Omit<BlogItem, "uuid" | "createdAt" | "author">): Promise<BlogItem> {
+        try {
+            const res = await axios.patch(`${base}/blog/update/${uuid}`, data, {
+                headers: {
+                    Authorization: getSessionToken(),
+                },
+            });
+            return res.data;
+        } catch (e) {
+            throw this.createError(e);
+        }
+    }
+
+    public static async deleteBlog(uuid: string): Promise<void> {
+        try {
+            await axios.delete(`${base}/blog/delete/${uuid}`, {
+                headers: {
+                    Authorization: getSessionToken(),
+                },
+            });
         } catch (e) {
             throw this.createError(e);
         }
