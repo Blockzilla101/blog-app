@@ -2,6 +2,7 @@
 
 import Blog from "../components/Blog.vue";
 import { Backend } from "../api/backend.ts";
+import type { BlogItem } from "../api/types.ts";
 
 const props = defineProps({
     uuid: {
@@ -11,7 +12,13 @@ const props = defineProps({
 });
 
 const account = await Backend.fetchSessionAccount();
-const blog = await Backend.fetchBlog(props.uuid);
+let blog: BlogItem;
+
+try {
+    blog = await Backend.fetchBlog(props.uuid);
+} catch (e) {
+    window.location.pathname = "/404";
+}
 
 </script>
 

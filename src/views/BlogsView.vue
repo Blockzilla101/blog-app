@@ -5,29 +5,32 @@ import { ref } from "vue";
 import { Backend } from "../api/backend.ts";
 import BlogList from "../components/BlogList.vue";
 
-const blogs = ref<BlogItem[]>([
-    await Backend.fetchBlog("1"),
-    await Backend.fetchBlog("2"),
-    await Backend.fetchBlog("3"),
-    await Backend.fetchBlog("4"),
-    await Backend.fetchBlog("5"),
-]);
-
+const blogs = ref<BlogItem[]>([]);
 const account = ref(await Backend.fetchSessionAccount(false));
 
+let cursor: string | null = null;
+const hasNext = ref(false);
+
 async function loadMore() {
-    const amount = Math.floor(Math.random() * 5) + 1;
-    for (let i = 0; i < amount; i++) {
-        blogs.value.push(
-          await Backend.fetchBlog((blogs.value.length + 1).toString()),
-        );
-    }
+    const list = await Backend.fetchBlogs({ after: cursor ?? undefined });
+    blogs.value.push(...list.blogs);
+
+    hasNext.value = list.hasNext;
+    cursor = list.next;
 }
+
+await loadMore();
 
 </script>
 
 <template>
-    <BlogList :account="account" :all-loaded="blogs.length >= 20" :blogs="blogs" @load-more="loadMore"></BlogList>
+    <section v-if="blogs.length === 0" class="card card-center">
+        <h1>No Blogs</h1>
+        <p>No one has created any blogs. Sign up to create blogs</p>
+    </section>
+    <section v-else class="card blog-section">
+        <BlogList :account="account" :all-loaded="!hasNext" :blogs="blogs" @load-more="loadMore"></BlogList>
+    </section>
 </template>
 
 <style scoped>
