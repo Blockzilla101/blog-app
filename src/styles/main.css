@@ -6,6 +6,7 @@
     --background-color: #f0f0f0;
     --foreground-color: #222;
     --card-background-color: #f0f0f066;
+    --card-background-color-darker: rgba(168, 168, 168, 0.4);
     --text-color: black;
 
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -27,15 +28,23 @@ body {
     background-image: url("/background.svg");
 }
 
-.card-section {
+.card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 6em 0;
     background-color: var(--card-background-color);
     backdrop-filter: blur(12px);
     border-radius: 1em;
     padding: 1.5em 3em;
+}
+
+.card-section {
+    margin: 6em 0;
+}
+
+.blog-section {
+    width: 80%;
+    margin: 6em 0;
 }
 
 .card-center {
@@ -43,13 +52,13 @@ body {
     width: 35em;
 }
 
-.card-section h1 {
+.card h1 {
     font-size: 2em;
     margin-bottom: 0.5em;
     font-weight: 800;
 }
 
-.card-section p {
+.card p {
     font-size: 1.2em;
     margin-bottom: 2em;
     text-align: center;
@@ -187,6 +196,13 @@ body {
 .hover-invert:hover {
     color: var(--background-color);
     background-color: var(--foreground-color);
+}
+
+@media (max-width: 768px) {
+    .blog-section {
+        margin-top: 0;
+        width: 100%;
+    }
 }
 
 @media (max-width: 600px) {

@@ -51,7 +51,7 @@ async function formSubmit(event: Event) {
 </script>
 
 <template>
-    <section class="card-section">
+    <section class="card card-section">
         <div class="settings-container">
             <User :user="account"></User>
             <form class="form" @submit="formSubmit">

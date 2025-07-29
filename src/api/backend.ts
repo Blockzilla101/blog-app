@@ -101,7 +101,9 @@ export class Backend {
         }
     }
 
-    public static async fetchSessionAccount(): Promise<AccountInfo> {
+    public static async fetchSessionAccount(): Promise<AccountInfo>
+    public static async fetchSessionAccount(fail: boolean): Promise<AccountInfo | undefined>
+    public static async fetchSessionAccount(fail = true): Promise<AccountInfo | undefined> {
         try {
             const res = await axios.get(`${base}/account/info`, {
                 headers: {
@@ -110,6 +112,7 @@ export class Backend {
             });
             return res.data;
         } catch (e) {
+            if (!fail) return undefined;
             throw this.createError(e);
         }
     }
@@ -135,7 +138,7 @@ export class Backend {
             //     },
             // });
             // return res.data;
-            return sampleBlog(uuid, "test-uuid");
+            return sampleBlog(uuid);
         } catch (e) {
             throw this.createError(e);
         }

@@ -1,8 +1,17 @@
-export function sampleBlog(uuid: string, authorUuid: string) {
+const testUser = "98a695dd-beaa-4b24-aa43-41c2754e1d0e";
+
+function getAuthorUuid() {
+    if (Math.random() < 0.5) {
+        return testUser;
+    }
+    return "test";
+}
+
+export function sampleBlog(uuid: string) {
     return {
         uuid,
         author: {
-            uuid: authorUuid,
+            uuid: getAuthorUuid(),
             firstName: "Sample",
             lastName: "User",
             bio: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",

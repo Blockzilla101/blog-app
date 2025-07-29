@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <section class="card-section card-center">
+    <section class="card card-section card-center">
         <h1 class="error-text">404 Page not found</h1>
         <p>Sorry, the page you are looking for does not exist.</p>
     </section>

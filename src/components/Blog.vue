@@ -16,7 +16,7 @@ const props = defineProps({
     },
     account: {
         type: Object as () => AccountInfo,
-        required: true,
+        required: false,
     },
     preview: {
         type: Boolean,
@@ -24,7 +24,28 @@ const props = defineProps({
     },
 });
 
-const editingAllowed = computed(() => props.blog.author.uuid === props.account.uuid && !route.path.startsWith("/blog/edit"));
+const editingAllowed = computed(() => {
+    if (route.path.startsWith("/blog/edit")) {
+        return false;
+    }
+
+    if (props.preview) {
+        return false;
+    }
+
+    if (!props.account) {
+        return false;
+    }
+
+    return props.blog.author.uuid === props.account.uuid;
+});
+
+const content = computed(() => {
+    if (props.preview) {
+        return props.blog.content.slice(0, 400) + (props.blog.content.length > 200 ? "..." : "");
+    }
+    return props.blog.content;
+});
 
 function onEdit() {
     window.location.pathname = `/blog/edit/${props.blog.uuid}`;
@@ -33,14 +54,14 @@ function onEdit() {
 </script>
 
 <template>
-    <section class="card-section blog-container">
+    <section class="card blog-container">
         <div class="flex justify-between items-start w-full">
             <h1 class="blog-title">{{ blog.title }}</h1>
             <button v-show="editingAllowed" class="icon-btn icon-btn-primary" @click="onEdit">
                 <img alt="Complete Todo" src="/edit-dark.svg">
             </button>
         </div>
-        <p class="blog-content">{{ blog.content }}</p>
+        <p class="blog-content">{{ content }}</p>
         <User :user="blog.author" class="text-sm" />
     </section>
 </template>
