@@ -153,6 +153,12 @@ export class Backend {
                 return;
             }
 
+            if (e.status === 404) {
+                console.warn("Resource not found", e);
+                window.location.pathname = "/404";
+                return;
+            }
+
             throw new ApiError(e);
         }
         console.error("Unknown error api error", e);
