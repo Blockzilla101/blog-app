@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 
 import type { AccountInfo, BlogItem } from "../api/types.ts";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { Backend } from "../api/backend.ts";
 
 const props = defineProps({
@@ -29,10 +29,17 @@ const blog = ref<Pick<BlogItem, "title" | "content" | "uuid">>({
     uuid: props.uuid,
 });
 
+const textArea = ref<HTMLTextAreaElement | null>(null);
+
 if (!isNew.value) {
     const fetchedBlog = await Backend.fetchBlog(props.uuid);
     blog.value.title = fetchedBlog.title;
     blog.value.content = fetchedBlog.content;
+}
+
+function textAreaInput(target: HTMLTextAreaElement) {
+    target.style.height = "auto";
+    target.style.height = `${target.scrollHeight}px`;
 }
 
 async function formSubmit(event: Event) {
@@ -60,6 +67,12 @@ async function formSubmit(event: Event) {
     }
 }
 
+onMounted(() => {
+    if (textArea.value) {
+        textAreaInput(textArea.value);
+    }
+});
+
 </script>
 
 <template>
@@ -69,8 +82,9 @@ async function formSubmit(event: Event) {
                    required
                    type="text" />
 
-            <textarea v-model="blog.content" class="input blog-content" maxlength="4096" minlength="50"
-                      placeholder="Your blog content" required />
+            <textarea ref="textArea" v-model="blog.content" class="input blog-content" maxlength="4096" minlength="50"
+                      placeholder="Your blog content" required
+                      @input="textAreaInput($event.target as HTMLTextAreaElement)" />
 
             <div class="label-container">
                 <span class="error-text">{{ errorText }}</span>
@@ -105,6 +119,9 @@ async function formSubmit(event: Event) {
 
 .blog-content {
     font-size: 1.2em;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    min-height: 30em;
 }
 
 </style>

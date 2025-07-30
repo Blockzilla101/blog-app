@@ -42,7 +42,7 @@ const editingAllowed = computed(() => {
 
 const content = computed(() => {
     if (props.preview) {
-        return props.blog.content.slice(0, 400) + (props.blog.content.length > 200 ? "..." : "");
+        return props.blog.content.slice(0, 400);
     }
     return props.blog.content;
 });
@@ -61,8 +61,9 @@ function onEdit() {
                 <img alt="Complete Todo" src="/edit-dark.svg">
             </button>
         </div>
-        <p class="blog-content">{{ content }}</p>
-        <User :user="blog.author" class="text-sm" />
+        <p :class="{ preview }" class="blog-content">{{ content }}</p>
+        <span v-if="preview" class="preview-text">read more...</span>
+        <User :user="blog.author" class="text-sm mt-3" />
     </section>
 </template>
 
@@ -70,6 +71,7 @@ function onEdit() {
 
 .blog-container {
     align-items: start;
+    width: 100%;
 }
 
 .blog-title {
@@ -79,6 +81,26 @@ function onEdit() {
 .blog-content {
     text-align: start;
     white-space: pre-line;
+    word-wrap: anywhere;
+    flex-grow: 1;
+    min-height: 30em;
+    margin: 0.5em;
 }
+
+.preview-text {
+    width: 100%;
+    text-align: right;
+    color: color-mix(in srgb, var(--primary-color), black 20%);
+    font-style: italic;
+    font-size: 1.2em;
+}
+
+.preview {
+    position: relative;
+    min-height: 20em;
+    max-height: 20em;
+    overflow: hidden;
+}
+
 
 </style>
