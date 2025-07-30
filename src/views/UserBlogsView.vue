@@ -29,6 +29,10 @@ async function loadMore() {
     cursor = list.next;
 }
 
+function createBlog() {
+    window.location.pathname = "/blog/edit/new";
+}
+
 await loadMore();
 
 </script>
@@ -37,7 +41,7 @@ await loadMore();
     <section class="card blog-section">
         <div class="flex self-start justify-between w-full">
             <h1 class="underline underline-offset-5">Your Blogs</h1>
-            <button class="btn max-h-10">New Blog</button>
+            <button class="btn max-h-10" @click="createBlog">New Blog</button>
         </div>
         <p class="self-start">
             Click on a blog to view or edit it, or click the "Load More" button to load more blogs.

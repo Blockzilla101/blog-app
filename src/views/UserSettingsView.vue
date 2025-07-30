@@ -138,10 +138,6 @@ async function formSubmit(event: Event) {
     width: 100%;
 }
 
-.card {
-    width: 40em;
-}
-
 @media (max-width: 768px) {
     .card {
         width: unset;
