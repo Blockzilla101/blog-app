@@ -2,16 +2,19 @@
 
 import Blog from "../components/Blog.vue";
 import { Backend } from "../api/backend.ts";
-import type { BlogItem } from "../api/types.ts";
+import type { AccountInfo, BlogItem } from "../api/types.ts";
 
 const props = defineProps({
     uuid: {
         type: String,
         required: true,
     },
+    account: {
+        type: Object as () => AccountInfo | null,
+        required: true,
+    },
 });
 
-const account = await Backend.fetchSessionAccount();
 let blog: BlogItem;
 
 try {

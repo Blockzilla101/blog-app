@@ -15,7 +15,7 @@ const props = defineProps({
         required: true,
     },
     account: {
-        type: Object as () => AccountInfo,
+        type: Object as () => AccountInfo | null | undefined,
         required: false,
     },
     preview: {

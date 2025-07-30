@@ -1,5 +1,25 @@
 <script lang="ts" setup>
 
+import type { AccountInfo } from "../api/types.ts";
+import { computed } from "vue";
+
+const props = defineProps({
+    uuid: {
+        type: String,
+        required: true,
+    },
+    account: {
+        type: Object as () => AccountInfo | null,
+        required: true,
+    },
+});
+
+if (!props.account) {
+    window.location.pathname = "/login";
+}
+
+const isNew = computed(() => props.uuid === "new");
+
 </script>
 
 <template>

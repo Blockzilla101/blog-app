@@ -5,7 +5,7 @@ import type { AccountInfo, BlogItem } from "../api/types.ts";
 
 defineProps({
     account: {
-        type: Object as () => AccountInfo | undefined,
+        type: Object as () => AccountInfo | undefined | null,
         required: true,
     },
     blogs: {

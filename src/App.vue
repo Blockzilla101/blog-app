@@ -2,18 +2,28 @@
 
 import { onMounted, ref } from "vue";
 import { checkIfLoggedIn } from "./api/util.ts";
-import type { AuthorizationResponse } from "./api/types.ts";
+import type { AccountInfo } from "./api/types.ts";
 import AccountMenu from "./components/AccountMenu.vue";
+import { Backend } from "./api/backend.ts";
 
 const isLoggedIn = ref(false);
 
-const account = ref<AuthorizationResponse["account"] | null>(null);
+const account = ref<AccountInfo | null>(null);
+
+const saved = localStorage.getItem("account");
+if (saved) {
+    try {
+        account.value = JSON.parse(saved) as AccountInfo;
+    } catch (e) {
+        console.error("Failed to parse saved account data:", e);
+    }
+}
 
 onMounted(async () => {
     isLoggedIn.value = await checkIfLoggedIn();
 
     if (isLoggedIn.value) {
-        account.value = JSON.parse(localStorage.getItem("account")!);
+        account.value = await Backend.fetchSessionAccount();
     }
 });
 
@@ -29,8 +39,13 @@ onMounted(async () => {
                 <h1>Blog App</h1>
             </div>
             <ul>
-                <li v-if="isLoggedIn">
+                <li v-if="isLoggedIn && account">
                     <AccountMenu :account="account!"></AccountMenu>
+                </li>
+                <li v-else-if="$route.path === '/blogs'">
+                    <router-link class="link hover-invert" to="/login">
+                        <span>Create a Blog</span>
+                    </router-link>
                 </li>
                 <li v-else-if="$route.path === '/login'">
                     <router-link class="link hover-invert" to="/sign-up">
@@ -52,7 +67,7 @@ onMounted(async () => {
                 <Transition name="fade">
                     <KeepAlive>
                         <Suspense>
-                            <component :is="Component"></component>
+                            <component :is="Component" :account="account"></component>
 
                             <!--                            <template #fallback>-->
                             <!--                                <section class="card-section card-center">-->

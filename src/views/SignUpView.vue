@@ -55,7 +55,7 @@ async function formSubmit(event: Event) {
 
 onMounted(async () => {
     if (await checkIfLoggedIn()) {
-        window.location.pathname = "/app";
+        window.location.pathname = "/blogs/me";
     }
 });
 

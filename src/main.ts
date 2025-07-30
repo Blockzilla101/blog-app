@@ -16,7 +16,7 @@ import UserBlogsView from "./views/UserBlogsView.vue";
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: "/", redirect: "/login" },
+        { path: "/", redirect: "/blogs" },
         { path: "/sign-up", component: SignUpView },
         { path: "/login", component: LoginView },
         { path: "/settings", component: UserSettingsView },

@@ -6,7 +6,16 @@ import { ApiError, Backend } from "../api/backend.ts";
 import { applyErrorsToRef } from "../api/util.ts";
 import User from "../components/User.vue";
 
-const account = ref<AccountInfo>(await Backend.fetchSessionAccount());
+const props = defineProps({
+    account: {
+        type: Object as () => AccountInfo | null,
+        required: true,
+    },
+});
+
+if (!props.account) {
+    window.location.pathname = "/login";
+}
 
 // todo implement profile picture upload
 
@@ -32,7 +41,7 @@ async function formSubmit(event: Event) {
     event.preventDefault();
 
     try {
-        await Backend.updateAccount(account.value);
+        await Backend.updateAccount(props.account!);
     } catch (e) {
         clearErrors();
 
@@ -53,14 +62,14 @@ async function formSubmit(event: Event) {
 <template>
     <section class="card card-section">
         <div class="settings-container">
-            <User :user="account"></User>
+            <User :user="account!"></User>
             <form class="form" @submit="formSubmit">
                 <div class="input-container">
                     <div class="label-container">
                         <label>First Name</label>
                         <span class="error-text">{{ errors.firstName }}</span>
                     </div>
-                    <input v-model="account.firstName" maxlength="25" minlength="2" placeholder="First name" required
+                    <input v-model="account!.firstName" maxlength="25" minlength="2" placeholder="First name" required
                            type="text" />
                 </div>
 
@@ -69,7 +78,7 @@ async function formSubmit(event: Event) {
                         <label>Last Name</label>
                         <span class="error-text">{{ errors.lastName }}</span>
                     </div>
-                    <input v-model="account.lastName" maxlength="25" minlength="2" placeholder="Last name" required
+                    <input v-model="account!.lastName" maxlength="25" minlength="2" placeholder="Last name" required
                            type="text" />
                 </div>
 
@@ -78,7 +87,7 @@ async function formSubmit(event: Event) {
                         <label>Email</label>
                         <span class="error-text">{{ errors.email }}</span>
                     </div>
-                    <input v-model="account.email" maxlength="100" minlength="1" placeholder="email@provider.com"
+                    <input v-model="account!.email" maxlength="100" minlength="1" placeholder="email@provider.com"
                            required
                            type="email" />
                 </div>
@@ -88,7 +97,7 @@ async function formSubmit(event: Event) {
                         <label>Bio</label>
                         <span class="error-text">{{ errors.bio }}</span>
                     </div>
-                    <input v-model="account.bio" maxlength="50" minlength="1" placeholder="Your bio" required
+                    <input v-model="account!.bio" maxlength="50" minlength="1" placeholder="Your bio" required
                            type="text" />
                 </div>
 

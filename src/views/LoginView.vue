@@ -35,12 +35,12 @@ async function formSubmit(event: Event) {
     }
     errorText.value = "";
 
-    window.location.pathname = "/app";
+    window.location.pathname = "/blogs/me";
 }
 
 onMounted(async () => {
     if (await checkIfLoggedIn()) {
-        window.location.pathname = "/app";
+        window.location.pathname = "/blogs/me";
     }
 });
 </script>

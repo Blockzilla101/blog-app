@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 
-import type { AuthorizationResponse } from "../api/types.ts";
+import type { AccountInfo } from "../api/types.ts";
 import { ref } from "vue";
 import { Backend } from "../api/backend.ts";
 
 defineProps({
     account: {
-        type: Object as () => AuthorizationResponse["account"],
+        type: Object as () => AccountInfo,
         required: true,
     },
 });

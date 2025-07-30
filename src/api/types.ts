@@ -51,6 +51,6 @@ export interface Session {
 }
 
 export interface AuthorizationResponse {
-    account: Pick<AccountInfo, "firstName" | "lastName">;
+    account: AccountInfo;
     session: Session;
 }

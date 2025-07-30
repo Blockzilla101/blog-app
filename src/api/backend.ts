@@ -12,9 +12,17 @@ import axios, { AxiosError } from "axios";
 
 const base = import.meta.env.VITE_API_BASE;
 
+function saveAccount(data: AccountInfo) {
+    localStorage.setItem("account", JSON.stringify(data));
+}
+
+function saveSession(data: Session) {
+    localStorage.setItem("session", JSON.stringify(data));
+}
+
 function handleSessionCreate(data: AuthorizationResponse) {
-    localStorage.setItem("session", JSON.stringify(data.session));
-    localStorage.setItem("account", JSON.stringify(data.account));
+    saveAccount(data.account);
+    saveSession(data.session);
 }
 
 function removeSession() {
@@ -27,6 +35,11 @@ export function getSessionToken(): string | null {
     if (!data) return null;
     const session = JSON.parse(data) as Session;
     return session.token ?? null;
+}
+
+function hasErrorMessage(msg: string, errors: ErrorItem[]): boolean {
+    return errors.some(error => error.msg.toLowerCase()
+                                     .includes(msg.toLowerCase()));
 }
 
 export class ApiError extends Error {
@@ -73,15 +86,13 @@ export class Backend {
         }
     }
 
-    public static async refreshSession() {
+    public static async refreshSession(): Promise<Session> {
         try {
             const res = await axios.get(`${base}/session/refresh`, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
+                headers: this.getHeaders(),
             });
 
-            handleSessionCreate(res.data);
+            saveSession(res.data);
 
             return res.data;
         } catch (e) {
@@ -92,10 +103,9 @@ export class Backend {
     public static async logout() {
         try {
             await axios.get(`${base}/session/revoke`, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
+                headers: this.getHeaders(),
             });
+            removeSession();
         } catch (e) {
             throw this.createError(e);
         }
@@ -106,10 +116,11 @@ export class Backend {
     public static async fetchSessionAccount(fail = true): Promise<AccountInfo | undefined> {
         try {
             const res = await axios.get(`${base}/account/info`, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
+                headers: this.getHeaders(),
             });
+
+            saveAccount(res.data);
+
             return res.data;
         } catch (e) {
             if (!fail) return undefined;
@@ -120,9 +131,7 @@ export class Backend {
     public static async updateAccount(account: Omit<AccountInfo, "blogUuids">): Promise<void> {
         try {
             await axios.patch(`${base}/account/update`, account, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
+                headers: this.getHeaders(),
             });
         } catch (e) {
             throw this.createError(e);
@@ -137,9 +146,7 @@ export class Backend {
             if (opts.limit) params.append("limit", opts.limit.toString());
 
             const res = await axios.get(`${base}/blog/blogs`, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
+                headers: this.getHeaders(),
                 params,
             });
 
@@ -152,9 +159,7 @@ export class Backend {
     public static async fetchBlog(uuid: string): Promise<BlogItem> {
         try {
             const res = await axios.get(`${base}/blog/by-uuid/${uuid}`, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
+                headers: this.getHeaders(),
             });
             return res.data;
         } catch (e) {
@@ -165,9 +170,7 @@ export class Backend {
     public static async createBlog(data: Omit<BlogItem, "uuid" | "createdAt" | "author">): Promise<BlogItem> {
         try {
             const res = await axios.post(`${base}/blog/create`, data, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
+                headers: this.getHeaders(),
             });
             return res.data;
         } catch (e) {
@@ -178,9 +181,7 @@ export class Backend {
     public static async updateBlog(uuid: string, data: Omit<BlogItem, "uuid" | "createdAt" | "author">): Promise<BlogItem> {
         try {
             const res = await axios.patch(`${base}/blog/update/${uuid}`, data, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
+                headers: this.getHeaders(),
             });
             return res.data;
         } catch (e) {
@@ -191,17 +192,27 @@ export class Backend {
     public static async deleteBlog(uuid: string): Promise<void> {
         try {
             await axios.delete(`${base}/blog/delete/${uuid}`, {
-                headers: {
-                    Authorization: getSessionToken(),
-                },
+                headers: this.getHeaders(),
             });
         } catch (e) {
             throw this.createError(e);
         }
     }
 
+    private static getHeaders() {
+        const token = getSessionToken();
+
+        if (!token) return {};
+
+        return {
+            Authorization: token,
+        };
+    }
+
     private static createError(e: unknown) {
         if (e instanceof AxiosError) {
+            const errors = e.response?.data?.errors;
+
             if (e.status === 401) {
                 removeSession();
                 console.warn("Session expired, redirecting to login");
@@ -212,6 +223,13 @@ export class Backend {
             if (e.status === 404) {
                 console.warn("Resource not found", e);
                 window.location.pathname = "/404";
+                return;
+            }
+
+            if (errors && e.status === 400 && hasErrorMessage("unknown session", errors) || hasErrorMessage("session expired", errors)) {
+                removeSession();
+                console.warn("Session expired, redirecting to login");
+                // window.location.pathname = "/login";
                 return;
             }
 
