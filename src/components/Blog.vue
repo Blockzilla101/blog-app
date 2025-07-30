@@ -4,10 +4,13 @@ import User from "./User.vue";
 import type { AccountInfo, BlogItem } from "../api/types.ts";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
 
-// todo add a partial mode
+TimeAgo.addLocale(en);
 
 const route = useRoute();
+const timeAgo = new TimeAgo("en-US");
 
 const props = defineProps({
     blog: {
@@ -61,6 +64,11 @@ function onEdit() {
                 <img alt="Complete Todo" src="/edit-dark.svg">
             </button>
         </div>
+        <div class="create-time">
+            <span>posted {{ timeAgo.format(blog.createdAt) }}</span>
+            <span>{{ new Date(blog.createdAt).toISOString()
+                                             .slice(0, 10) }}</span>
+        </div>
         <p :class="{ preview }" class="blog-content">{{ content }}</p>
         <span v-if="preview" class="preview-text">read more...</span>
         <User :user="blog.author" class="text-sm mt-3" />
@@ -75,7 +83,16 @@ function onEdit() {
 }
 
 .blog-title {
-    margin-bottom: 0.85em;
+    margin-bottom: 0;
+}
+
+.create-time {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    color: color-mix(in srgb, var(--primary-color), black 20%);
+    font-style: italic;
+    margin: 0 0 0.85em;
 }
 
 .blog-content {
