@@ -29,7 +29,7 @@ function openBlog(blog: BlogItem) {
 </script>
 
 <template>
-    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 w-full">
         <Blog v-for="blog in blogs" :key="blog.uuid" :account="account" :blog="blog" :preview="true"
               class="blog-preview odd:last:col-span-2" @click="openBlog(blog)"></Blog>
     </div>

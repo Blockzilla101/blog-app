@@ -229,7 +229,7 @@ export class Backend {
             if (errors && e.status === 400 && hasErrorMessage("unknown session", errors) || hasErrorMessage("session expired", errors)) {
                 removeSession();
                 console.warn("Session expired, redirecting to login");
-                // window.location.pathname = "/login";
+                window.location.pathname = "/login";
                 return;
             }
 

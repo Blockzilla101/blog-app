@@ -66,8 +66,7 @@ function onEdit() {
         </div>
         <div class="create-time">
             <span>posted {{ timeAgo.format(blog.createdAt) }}</span>
-            <span>{{ new Date(blog.createdAt).toISOString()
-                                             .slice(0, 10) }}</span>
+            <span>{{ new Date(blog.createdAt).toLocaleDateString("en-UK") }}</span>
         </div>
         <p :class="{ preview }" class="blog-content">{{ content }}</p>
         <span v-if="preview" class="preview-text">read more...</span>
