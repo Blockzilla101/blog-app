@@ -59,11 +59,18 @@ async function formSubmit(event: Event) {
         }
         window.location.pathname = `/blog/${uuid}`;
     } catch (e) {
-        if (e instanceof Error) {
-            errorText.value = e.message;
-        } else {
-            errorText.value = "An unknown error occurred.";
-        }
+        errorText.value = "An unknown error occurred.";
+    }
+}
+
+async function deleteBlog() {
+    errorText.value = "";
+
+    try {
+        await Backend.deleteBlog(props.uuid);
+        window.location.pathname = "/blogs/me";
+    } catch (e) {
+        errorText.value = "An unknown error occurred.";
     }
 }
 
@@ -86,9 +93,10 @@ onMounted(() => {
                       placeholder="Your blog content" required
                       @input="textAreaInput($event.target as HTMLTextAreaElement)" />
 
-            <div class="label-container">
+            <div class="btn-container">
                 <span class="error-text">{{ errorText }}</span>
-                <button class="btn" type="submit">{{ isNew ? "Create" : "Save" }}</button>
+                <button v-if="!isNew" class="btn btn-danger" @click="deleteBlog">Delete</button>
+                <button class="btn btn-primary" type="submit">{{ isNew ? "Create" : "Save" }}</button>
             </div>
         </form>
     </section>
@@ -122,6 +130,18 @@ onMounted(() => {
     overflow-x: hidden;
     overflow-y: hidden;
     min-height: 30em;
+    resize: none;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1em;
+}
+
+.error-text {
+    flex-grow: 1;
 }
 
 </style>

@@ -5,6 +5,7 @@
     --primary-color: #4a90e2;
     --background-color: #f0f0f0;
     --foreground-color: #222;
+    --danger-color: #fb5d4b;
     --card-background-color: hsla(0, 0%, 95%, 0.4);
     --card-background-color-darker: hsla(0, 0%, 80%, 0.4);
     --text-color: black;
@@ -132,6 +133,26 @@ body {
     transform: translateX(-120%) skewX(30deg);
     transition: 0.2s ease-in-out;
     z-index: -1;
+}
+
+.btn-danger {
+    color: var(--foreground-color);
+    background-color: color-mix(in srgb, var(--danger-color) 50%, transparent);
+    border: 1px solid var(--danger-color);
+}
+
+.btn-danger::before {
+    background-color: var(--danger-color);
+}
+
+.btn-primary {
+    color: var(--foreground-color);
+    background-color: color-mix(in srgb, var(--primary-color) 50%, transparent);
+    border: 1px solid var(--primary-color);
+}
+
+.btn-primary::before {
+    background-color: var(--primary-color);
 }
 
 .btn:hover {
