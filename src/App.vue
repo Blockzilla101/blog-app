@@ -39,6 +39,11 @@ onMounted(async () => {
                 <h1>Blog App</h1>
             </div>
             <ul>
+                <li>
+                    <router-link class="link hover-invert" to="/blogs">
+                        <span>Latest Blogs</span>
+                    </router-link>
+                </li>
                 <li v-if="isLoggedIn && account">
                     <AccountMenu :account="account!"></AccountMenu>
                 </li>
@@ -124,7 +129,7 @@ nav ul {
     align-items: center;
     padding: 0 1.5em;
     height: 100%;
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
 main {

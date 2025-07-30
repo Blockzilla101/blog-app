@@ -36,7 +36,7 @@ document.addEventListener("click", (event) => {
 </script>
 
 <template>
-    <div id="account-menu" class="container">
+    <div id="account-menu" class="menu-container">
         <button :class="{ 'active': menuShown }" class="username hover-invert" @click="menuShown = !menuShown">
             <span>{{ account.firstName }}</span>
             <span class="last-name">{{ account.lastName }}</span>
@@ -59,7 +59,7 @@ document.addEventListener("click", (event) => {
 
 <style scoped>
 
-.container {
+.menu-container {
     position: relative;
     height: 100%;
 }

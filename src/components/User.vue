@@ -13,7 +13,7 @@ defineProps({
 
 <template>
     <div class="avatar-container">
-        <img alt="Profile Picture" class="avatar" src="/avatar-default.svg" />
+        <img alt="Profile Picture" class="avatar not-sm:hidden" src="/avatar-default.svg" />
         <div class="avatar-text">
             <h2>{{ user.firstName }} {{ user.lastName }}</h2>
             <p>{{ user.bio }}</p>

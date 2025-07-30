@@ -31,7 +31,7 @@ function openBlog(blog: BlogItem) {
 <template>
     <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 w-full">
         <Blog v-for="blog in blogs" :key="blog.uuid" :account="account" :blog="blog" :preview="true"
-              class="blog-preview odd:last:col-span-2" @click="openBlog(blog)"></Blog>
+              class="blog-preview xl:odd:last:col-span-2" @click="openBlog(blog)"></Blog>
     </div>
     <button v-if="!allLoaded" class="btn" @click="$emit('load-more')">
         Load More

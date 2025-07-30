@@ -241,6 +241,10 @@ body {
         margin: auto 0;
         width: 100%;
     }
+
+    .blog-section {
+        padding: 0;
+    }
 }
 
 @media (width <= 425px) {

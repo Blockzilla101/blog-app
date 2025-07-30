@@ -17,8 +17,6 @@ if (!props.account) {
     window.location.pathname = "/login";
 }
 
-// todo implement profile picture upload
-
 const errors = ref({
     firstName: "",
     lastName: "",
@@ -100,24 +98,6 @@ async function formSubmit(event: Event) {
                     <input v-model="account!.bio" maxlength="50" minlength="1" placeholder="Your bio" required
                            type="text" />
                 </div>
-
-                <div class="input-container">
-                    <div class="label-container">
-                        <label>Profile Picture</label>
-                        <!--                        <span class="error-text">{{ errors.bio }}</span>-->
-                    </div>
-                    <!--                // todo -->
-                    <input type="file" />
-                </div>
-
-                <!--            <div class="input-container">-->
-                <!--                <div class="label-container">-->
-                <!--                    <label>Password</label>-->
-                <!--                    <span class="error-text">{{ errors.password }}</span>-->
-                <!--                </div>-->
-                <!--                <input v-model="password" minlength="8" placeholder="Choose a strong password" required-->
-                <!--                       type="password" />-->
-                <!--            </div>-->
 
                 <div class="label-container">
                     <span class="error-text">{{ errors.unknownError }}</span>
