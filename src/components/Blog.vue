@@ -45,7 +45,7 @@ const editingAllowed = computed(() => {
 
 const content = computed(() => {
     if (props.preview) {
-        return props.blog.content.slice(0, 400);
+        return props.blog.content.slice(0, 1000);
     }
     return props.blog.content;
 });

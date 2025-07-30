@@ -16,7 +16,7 @@ export async function checkIfLoggedIn(): Promise<boolean> {
         const session = JSON.parse(localStorage.getItem("session") ?? "") as Session;
         const account = JSON.parse(localStorage.getItem("account") ?? "") as AuthorizationResponse["account"];
 
-        if (!session.token || !account.firstName || !account.lastName || session.expiresAt < Date.now()) {
+        if (!session.token || !account.firstName || session.expiresAt < Date.now()) {
             return false;
         }
 
